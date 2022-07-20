@@ -4,8 +4,7 @@ import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.security.NoTypePermission;
 
 import br.com.mnb.theme.batocera.factory.BatoceraInstanceFactory;
-import br.com.mnb.theme.batocera.xml.converter.tag.ElementTagConverter;
-import br.com.mnb.theme.batocera.xml.converter.tag.FeatureTagConverter;
+import br.com.mnb.theme.batocera.factory.FeatureFactory;
 import br.com.mnb.theme.batocera.xml.element.BatoceraCarousel;
 import br.com.mnb.theme.batocera.xml.element.Datetime;
 import br.com.mnb.theme.batocera.xml.element.HelpSystem;
@@ -18,13 +17,16 @@ import br.com.mnb.theme.batocera.xml.element.TextList;
 import br.com.mnb.theme.batocera.xml.element.Video;
 import br.com.mnb.theme.batocera.xml.feature.BatoceraFeature;
 import br.com.mnb.theme.batocera.xml.feature.CarouselFeature;
+import br.com.mnb.theme.batocera.xml.feature.FeatureConverter;
 import br.com.mnb.theme.batocera.xml.feature.VideoFeature;
 import br.com.mnb.theme.batocera.xml.theme.BatoceraTheme;
 import br.com.mnb.theme.batocera.xml.view.View;
+import br.com.mnb.theme.core.factory.ElementFactory;
 import br.com.mnb.theme.core.xml.Content;
 import br.com.mnb.theme.core.xml.converter.ContentXStreamConverter;
 import br.com.mnb.theme.core.xml.converter.ElementXStreamConverter;
 import br.com.mnb.theme.core.xml.converter.XmlConverter;
+import br.com.mnb.theme.core.xml.element.ElementConverter;
 
 public class FeatureXmlConverter extends XmlConverter<BatoceraFeature> {
 
@@ -36,12 +38,30 @@ public class FeatureXmlConverter extends XmlConverter<BatoceraFeature> {
 	}
 	
 	public FeatureXmlConverter(BatoceraInstanceFactory instanceFactory) {
-		
-		ElementTagConverter converter = new ElementTagConverter(instanceFactory);
-		elementXmlConverter = new ElementXStreamConverter(converter);
-		
-		FeatureTagConverter featureConverter = new FeatureTagConverter(instanceFactory);
-		featureXmlConverter = new FeatureXStreamConverter(featureConverter);
+		elementXmlConverter = getElementXmlConverter(instanceFactory);
+		featureXmlConverter = getFeatureXmlConverter(instanceFactory);
+	}
+	
+	public FeatureXStreamConverter getFeatureXmlConverter(FeatureFactory factory) {
+		FeatureConverter converter = new FeatureConverter(factory);
+		converter.registerElement("carousel", CarouselFeature.class);
+		converter.registerElement("video", VideoFeature.class);
+		return new FeatureXStreamConverter(converter);
+	}
+	
+	public ElementXStreamConverter getElementXmlConverter(ElementFactory factory) {
+		ElementConverter converter = new ElementConverter(factory);
+		converter.registerElement("text", Text.class);
+		converter.registerElement("image", Image.class);
+		converter.registerElement("datetime", Datetime.class);
+		converter.registerElement("helpsystem", HelpSystem.class);
+		converter.registerElement("ninepatch", Ninepatch.class);
+		converter.registerElement("rating", Rating.class);
+		converter.registerElement("sound", Sound.class);
+		converter.registerElement("textlist", TextList.class);
+		converter.registerElement("video", Video.class);
+		converter.registerElement("carousel", BatoceraCarousel.class);
+		return new ElementXStreamConverter(converter);
 	}
 
 

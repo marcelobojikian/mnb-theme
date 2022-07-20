@@ -1,28 +1,41 @@
-package br.com.mnb.theme.batocera.xml.converter.tag;
+package br.com.mnb.theme.batocera.xml.feature;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import br.com.mnb.theme.batocera.xml.feature.AbstractFeature;
-import br.com.mnb.theme.batocera.xml.feature.CarouselFeature;
-import br.com.mnb.theme.batocera.xml.feature.VideoFeature;
+import br.com.mnb.theme.batocera.factory.FeatureFactory;
 
-class FeatureTagConverterTest {
+class FeatureConverterTest {
 
-	private FeatureTagConverter featureConverter = new FeatureTagConverter();
+	FeatureConverter converter;
+	
+	@BeforeEach
+	public void setup() {
+		
+		FeatureFactory factory = mock(FeatureFactory.class);
+		when(factory.createFeature(CarouselFeature.class)).thenReturn(new CarouselFeature());
+		when(factory.createFeature(VideoFeature.class)).thenReturn(new VideoFeature());
+		
+		converter = new FeatureConverter(factory);
+		converter.registerElement("carousel", CarouselFeature.class);
+		converter.registerElement("video", VideoFeature.class);
+	}
 
 	@Test
 	void sucessWhenConvertTagNameToFeature() {
 
-		AbstractFeature feature = featureConverter.toComponent("carousel");
+		AbstractFeature feature = converter.toComponent("carousel");
 		assertNotNull(feature);
 		assertInstanceOf(CarouselFeature.class, feature);
 
-		feature = featureConverter.toComponent("video");
+		feature = converter.toComponent("video");
 		assertNotNull(feature);
 		assertInstanceOf(VideoFeature.class, feature);
 
@@ -31,11 +44,11 @@ class FeatureTagConverterTest {
 	@Test
 	void sucessWhenConvertFeatureToTagName() {
 
-		String result = featureConverter.toString(new CarouselFeature());
+		String result = converter.toString(new CarouselFeature());
 		assertNotNull(result);
 		assertEquals("carousel", result);
 
-		result = featureConverter.toString(new VideoFeature());
+		result = converter.toString(new VideoFeature());
 		assertNotNull(result);
 		assertEquals("video", result);
 
@@ -44,14 +57,14 @@ class FeatureTagConverterTest {
 	@Test
 	void failWhenConvertTagToFeatureWithTagNameUnmapped() {
 		assertThrows(IllegalArgumentException.class, () -> {
-			featureConverter.toComponent("Other");
+			converter.toComponent("Other");
 		});
 	}
 
 	@Test
 	void failWhenConvertFeatureToTagNameWithComponentUnmapped() {
 		assertThrows(IllegalArgumentException.class, () -> {
-			featureConverter.toString(new UnmappedFeature());
+			converter.toString(new UnmappedFeature());
 		});
 	}
 	

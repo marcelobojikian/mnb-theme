@@ -1,19 +1,68 @@
 package br.com.mnb.theme.core.xml.theme;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.security.NoTypePermission;
+
+import br.com.mnb.theme.core.factory.InstanceFactory;
+import br.com.mnb.theme.core.model.Element;
+import br.com.mnb.theme.core.model.SecondElement;
 import br.com.mnb.theme.core.model.Theme;
 import br.com.mnb.theme.core.model.View;
-import br.com.mnb.theme.core.xml.converter.ThemeXmlConverter;
+import br.com.mnb.theme.core.xml.Content;
+import br.com.mnb.theme.core.xml.converter.ContentXStreamConverter;
+import br.com.mnb.theme.core.xml.converter.ElementXStreamConverter;
+import br.com.mnb.theme.core.xml.element.ElementConverter;
 import br.com.mnb.theme.core.xml.view.ViewElement;
 
 class AbstractThemeTest {
+	
+	XStream xstream;
+	
+	@BeforeEach
+	public void setup() {
 
-	ThemeXmlConverter xstream = new ThemeXmlConverter();
+		ElementConverter converter = new ElementConverter(new InstanceFactory());
+		converter.registerElement("element", Element.class);
+		converter.registerElement("second", SecondElement.class);
+		
+		ElementXStreamConverter xmlConverter = new ElementXStreamConverter(converter);
+
+		xstream = new XStream();
+
+		xstream.autodetectAnnotations(true);
+		xstream.ignoreUnknownElements();
+
+		xstream.registerConverter(new ContentXStreamConverter());
+		xstream.registerConverter(xmlConverter);
+
+		xstream.processAnnotations(View.class);
+		xstream.processAnnotations(Element.class);
+		xstream.processAnnotations(SecondElement.class);
+		xstream.processAnnotations(Content.class);
+		
+		xstream.addPermission(NoTypePermission.NONE);
+		
+		xstream.allowTypes(new Class[] {
+				View.class,
+				Element.class,
+				SecondElement.class,
+				Content.class });
+		
+		xstream.processAnnotations(Theme.class);
+		xstream.allowTypes(new Class[] { Theme.class });
+		
+	}
 
 	@Test
 	public void whenCreateTheme_DefaultValues() {
@@ -151,7 +200,7 @@ class AbstractThemeTest {
 					  + "</theme>";
 		// @formatter:on
 
-		ThemeElement themeObj = xstream.fromXML(result);
+		ThemeElement themeObj = (ThemeElement) xstream.fromXML(result);
 
 		assertNotNull(themeObj);
 		assertEquals(themeObj.getFormatVersion(), 4);

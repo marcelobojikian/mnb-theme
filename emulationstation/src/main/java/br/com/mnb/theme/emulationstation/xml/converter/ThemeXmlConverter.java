@@ -9,7 +9,7 @@ import br.com.mnb.theme.core.xml.Content;
 import br.com.mnb.theme.core.xml.converter.ContentXStreamConverter;
 import br.com.mnb.theme.core.xml.converter.ElementXStreamConverter;
 import br.com.mnb.theme.core.xml.converter.XmlConverter;
-import br.com.mnb.theme.emulationstation.xml.converter.tag.ElementTagConverter;
+import br.com.mnb.theme.core.xml.element.ElementConverter;
 import br.com.mnb.theme.emulationstation.xml.element.Datetime;
 import br.com.mnb.theme.emulationstation.xml.element.HelpSystem;
 import br.com.mnb.theme.emulationstation.xml.element.Image;
@@ -33,8 +33,21 @@ public class ThemeXmlConverter extends XmlConverter<EmulationStationTheme> {
 	
 	public ThemeXmlConverter(ElementFactory instaceFactory) {
 		contentXmlConverter = new ContentXStreamConverter();
-		ElementTagConverter elementConverter = new ElementTagConverter(instaceFactory);
-		elementXmlConverter = new ElementXStreamConverter(elementConverter);
+		elementXmlConverter = getElementXmlConverter(instaceFactory);
+	}
+	
+	public ElementXStreamConverter getElementXmlConverter(ElementFactory factory) {
+		ElementConverter converter = new ElementConverter(factory);
+		converter.registerElement("text", Text.class);
+		converter.registerElement("image", Image.class);
+		converter.registerElement("datetime", Datetime.class);
+		converter.registerElement("helpsystem", HelpSystem.class);
+		converter.registerElement("ninepatch", Ninepatch.class);
+		converter.registerElement("rating", Rating.class);
+		converter.registerElement("sound", Sound.class);
+		converter.registerElement("textlist", TextList.class);
+		converter.registerElement("video", Video.class);
+		return new ElementXStreamConverter(converter);
 	}
 	
 	@Override

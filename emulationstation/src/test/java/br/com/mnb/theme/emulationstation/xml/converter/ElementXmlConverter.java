@@ -3,13 +3,14 @@ package br.com.mnb.theme.emulationstation.xml.converter;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.security.NoTypePermission;
 
+import br.com.mnb.theme.core.factory.ElementFactory;
 import br.com.mnb.theme.core.factory.InstanceFactory;
 import br.com.mnb.theme.core.xml.Content;
 import br.com.mnb.theme.core.xml.converter.ContentXStreamConverter;
 import br.com.mnb.theme.core.xml.converter.ElementXStreamConverter;
 import br.com.mnb.theme.core.xml.converter.XmlConverter;
 import br.com.mnb.theme.core.xml.element.AbstractElement;
-import br.com.mnb.theme.emulationstation.xml.converter.tag.ElementTagConverter;
+import br.com.mnb.theme.core.xml.element.ElementConverter;
 import br.com.mnb.theme.emulationstation.xml.element.Datetime;
 import br.com.mnb.theme.emulationstation.xml.element.HelpSystem;
 import br.com.mnb.theme.emulationstation.xml.element.Image;
@@ -23,16 +24,28 @@ import br.com.mnb.theme.emulationstation.xml.view.View;
 
 public class ElementXmlConverter extends XmlConverter<AbstractElement> {
 	
-	ElementTagConverter converter;
 	ElementXStreamConverter xmlConverter;
 	
 	public ElementXmlConverter() {
 		this(new InstanceFactory());
 	}
 	
-	public ElementXmlConverter(InstanceFactory instanceFactory) {	
-		converter = new ElementTagConverter(instanceFactory);
-		xmlConverter = new ElementXStreamConverter(converter);
+	public ElementXmlConverter(InstanceFactory instanceFactory) {
+		xmlConverter = getElementXmlConverter(instanceFactory);
+	}
+	
+	public ElementXStreamConverter getElementXmlConverter(ElementFactory factory) {
+		ElementConverter converter = new ElementConverter(factory);
+		converter.registerElement("text", Text.class);
+		converter.registerElement("image", Image.class);
+		converter.registerElement("datetime", Datetime.class);
+		converter.registerElement("helpsystem", HelpSystem.class);
+		converter.registerElement("ninepatch", Ninepatch.class);
+		converter.registerElement("rating", Rating.class);
+		converter.registerElement("sound", Sound.class);
+		converter.registerElement("textlist", TextList.class);
+		converter.registerElement("video", Video.class);
+		return new ElementXStreamConverter(converter);
 	}
 
 	@Override

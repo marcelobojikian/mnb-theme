@@ -6,21 +6,25 @@ import com.thoughtworks.xstream.security.NoTypePermission;
 import br.com.mnb.theme.core.factory.ElementFactory;
 import br.com.mnb.theme.core.factory.InstanceFactory;
 import br.com.mnb.theme.core.model.Element;
+import br.com.mnb.theme.core.model.SecondElement;
 import br.com.mnb.theme.core.xml.Content;
-import br.com.mnb.theme.core.xml.converter.tag.ElementTagConverter;
 import br.com.mnb.theme.core.xml.element.CommonElement;
+import br.com.mnb.theme.core.xml.element.ElementConverter;
 
 public class ElementXmlConverter extends XmlConverter<CommonElement> {
 	
-	ElementTagConverter converter;
 	ElementXStreamConverter xmlConverter;
 	
 	public ElementXmlConverter() {
 		this(new InstanceFactory());
 	}
 	
-	public ElementXmlConverter(ElementFactory instanceFactory) {	
-		converter = new ElementTagConverter(instanceFactory);
+	public ElementXmlConverter(ElementFactory instanceFactory) {
+		
+		ElementConverter converter = new ElementConverter(instanceFactory);
+		converter.registerElement("element", Element.class);
+		converter.registerElement("second", SecondElement.class);
+		
 		xmlConverter = new ElementXStreamConverter(converter);
 	}
 
@@ -36,12 +40,14 @@ public class ElementXmlConverter extends XmlConverter<CommonElement> {
 		xstream.registerConverter(xmlConverter);
 
 		xstream.processAnnotations(Element.class);
+		xstream.processAnnotations(SecondElement.class);
 		xstream.processAnnotations(Content.class);
 		
 		xstream.addPermission(NoTypePermission.NONE);
 		
 		xstream.allowTypes(new Class[] {
 				Element.class,
+				SecondElement.class,
 				Content.class });
 		
 		return xstream;

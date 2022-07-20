@@ -5,12 +5,14 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import br.com.mnb.theme.core.factory.InstanceFactory;
 import br.com.mnb.theme.core.xml.element.AbstractElement;
+import br.com.mnb.theme.core.xml.element.ElementConverter;
 import br.com.mnb.theme.core.xml.view.AbstractViewElement;
-import br.com.mnb.theme.emulationstation.xml.converter.tag.ElementTagConverter;
-import br.com.mnb.theme.emulationstation.xml.converter.tag.ViewTagConverter;
+import br.com.mnb.theme.core.xml.view.ViewConverter;
 import br.com.mnb.theme.emulationstation.xml.element.Datetime;
 import br.com.mnb.theme.emulationstation.xml.element.HelpSystem;
 import br.com.mnb.theme.emulationstation.xml.element.Image;
@@ -24,8 +26,27 @@ import br.com.mnb.theme.emulationstation.xml.view.View;
 
 public class AllConverterTest {
 	
-	private ElementTagConverter elementConverter = new ElementTagConverter();
-	private ViewTagConverter viewConverter = new ViewTagConverter();
+	private ElementConverter elementConverter;
+	private ViewConverter viewConverter;
+	
+	@BeforeEach
+	public void setup() {
+		
+		elementConverter = new ElementConverter(new InstanceFactory());
+		elementConverter.registerElement("text", Text.class);
+		elementConverter.registerElement("image", Image.class);
+		elementConverter.registerElement("datetime", Datetime.class);
+		elementConverter.registerElement("helpsystem", HelpSystem.class);
+		elementConverter.registerElement("ninepatch", Ninepatch.class);
+		elementConverter.registerElement("rating", Rating.class);
+		elementConverter.registerElement("sound", Sound.class);
+		elementConverter.registerElement("textlist", TextList.class);
+		elementConverter.registerElement("video", Video.class);
+		
+		viewConverter = new ViewConverter(new InstanceFactory());
+		viewConverter.registerView("view", View.class);
+		
+	}
 
 	@Test
 	void sucessWhenConvertTagNameToView() {

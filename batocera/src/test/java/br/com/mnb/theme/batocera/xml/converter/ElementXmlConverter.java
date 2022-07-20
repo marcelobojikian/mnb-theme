@@ -4,7 +4,6 @@ import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.security.NoTypePermission;
 
 import br.com.mnb.theme.batocera.factory.BatoceraInstanceFactory;
-import br.com.mnb.theme.batocera.xml.converter.tag.ElementTagConverter;
 import br.com.mnb.theme.batocera.xml.element.BatoceraCarousel;
 import br.com.mnb.theme.batocera.xml.element.Datetime;
 import br.com.mnb.theme.batocera.xml.element.HelpSystem;
@@ -22,6 +21,7 @@ import br.com.mnb.theme.core.xml.converter.ContentXStreamConverter;
 import br.com.mnb.theme.core.xml.converter.ElementXStreamConverter;
 import br.com.mnb.theme.core.xml.converter.XmlConverter;
 import br.com.mnb.theme.core.xml.element.AbstractElement;
+import br.com.mnb.theme.core.xml.element.ElementConverter;
 
 public class ElementXmlConverter extends XmlConverter<AbstractElement> {
 	
@@ -32,8 +32,22 @@ public class ElementXmlConverter extends XmlConverter<AbstractElement> {
 	}
 	
 	public ElementXmlConverter(ElementFactory instanceFactory) {	
-		ElementTagConverter converter = new ElementTagConverter(instanceFactory);
-		xmlConverter = new ElementXStreamConverter(converter);
+		xmlConverter = getElementXmlConverter(instanceFactory);
+	}
+	
+	public ElementXStreamConverter getElementXmlConverter(ElementFactory factory) {
+		ElementConverter converter = new ElementConverter(factory);
+		converter.registerElement("text", Text.class);
+		converter.registerElement("image", Image.class);
+		converter.registerElement("datetime", Datetime.class);
+		converter.registerElement("helpsystem", HelpSystem.class);
+		converter.registerElement("ninepatch", Ninepatch.class);
+		converter.registerElement("rating", Rating.class);
+		converter.registerElement("sound", Sound.class);
+		converter.registerElement("textlist", TextList.class);
+		converter.registerElement("video", Video.class);
+		converter.registerElement("carousel", BatoceraCarousel.class);
+		return new ElementXStreamConverter(converter);
 	}
 
 	@Override

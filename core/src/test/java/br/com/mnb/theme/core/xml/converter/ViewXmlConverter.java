@@ -6,21 +6,25 @@ import com.thoughtworks.xstream.security.NoTypePermission;
 import br.com.mnb.theme.core.factory.ElementFactory;
 import br.com.mnb.theme.core.factory.InstanceFactory;
 import br.com.mnb.theme.core.model.Element;
+import br.com.mnb.theme.core.model.SecondElement;
 import br.com.mnb.theme.core.model.View;
 import br.com.mnb.theme.core.xml.Content;
-import br.com.mnb.theme.core.xml.converter.tag.ElementTagConverter;
+import br.com.mnb.theme.core.xml.element.ElementConverter;
 
 public class ViewXmlConverter extends XmlConverter<View> {
 	
-	ElementTagConverter converter;
 	ElementXStreamConverter xmlConverter;
 	
 	public ViewXmlConverter() {
 		this(new InstanceFactory());
 	}
 	
-	public ViewXmlConverter(ElementFactory instanceFactory) {	
-		converter = new ElementTagConverter(instanceFactory);
+	public ViewXmlConverter(ElementFactory instanceFactory) {
+		
+		ElementConverter converter = new ElementConverter(instanceFactory);
+		converter.registerElement("element", Element.class);
+		converter.registerElement("second", SecondElement.class);
+		
 		xmlConverter = new ElementXStreamConverter(converter);
 	}
 
@@ -37,6 +41,7 @@ public class ViewXmlConverter extends XmlConverter<View> {
 
 		xstream.processAnnotations(View.class);
 		xstream.processAnnotations(Element.class);
+		xstream.processAnnotations(SecondElement.class);
 		xstream.processAnnotations(Content.class);
 		
 		xstream.addPermission(NoTypePermission.NONE);
@@ -44,6 +49,7 @@ public class ViewXmlConverter extends XmlConverter<View> {
 		xstream.allowTypes(new Class[] {
 				View.class,
 				Element.class,
+				SecondElement.class,
 				Content.class });
 		
 		return xstream;

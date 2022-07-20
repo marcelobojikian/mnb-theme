@@ -7,14 +7,35 @@ import static org.junit.jupiter.api.Assertions.assertNotSame;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import br.com.mnb.theme.core.xml.converter.ContentXmlConverter;
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.security.NoTypePermission;
+
+import br.com.mnb.theme.core.xml.converter.ContentXStreamConverter;
 
 public class ContentTest {
+	
+	XStream xstream;
+	
+	@BeforeEach
+	public void setup() {
 
-	ContentXmlConverter xstream = new ContentXmlConverter();
+		xstream = new XStream();
+
+		xstream.autodetectAnnotations(true);
+		xstream.ignoreUnknownElements();
+
+		xstream.addPermission(NoTypePermission.NONE);
+
+		xstream.registerConverter(new ContentXStreamConverter());
+		xstream.allowTypes(new Class[] { Content.class });
+		
+		xstream.alias("element", Content.class);
+		
+	}
 
 	@Test
 	@DisplayName("Should convert to XML")
@@ -47,7 +68,7 @@ public class ContentTest {
 				      + "</element>";
 		// @formatter:on
 
-		Content contentObj = xstream.fromXML(result);
+		Content contentObj = (Content) xstream.fromXML(result);
 
 		assertNotNull(contentObj);
 		assertEquals(contentObj.getAttributes().get("key"), "value");

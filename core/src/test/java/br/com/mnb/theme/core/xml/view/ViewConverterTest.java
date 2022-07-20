@@ -1,23 +1,35 @@
-package br.com.mnb.theme.batocera.xml.converter.tag;
+package br.com.mnb.theme.core.xml.view;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import br.com.mnb.theme.batocera.xml.view.View;
-import br.com.mnb.theme.core.xml.view.AbstractViewElement;
+import br.com.mnb.theme.core.factory.ViewFactory;
+import br.com.mnb.theme.core.model.View;
 
-class ViewTagConverterTest {
-
-	private ViewTagConverter viewConverter = new ViewTagConverter();
+class ViewConverterTest {
+	
+	ViewConverter converter;
+	
+	@BeforeEach
+	public void setup() {
+		ViewFactory factory = mock(ViewFactory.class);
+		when(factory.createView(View.class)).thenReturn(new View());
+		
+		converter = new ViewConverter(factory);
+		converter.registerView("view", View.class);
+	}
 
 	@Test
 	void sucessWhenConvertTagNameToView() {
 		
-		AbstractViewElement view = viewConverter.toComponent("view");
+		AbstractViewElement view = converter.toComponent("view");
 		assertNotNull(view);
 		assertInstanceOf(View.class, view);
 		
@@ -26,7 +38,7 @@ class ViewTagConverterTest {
 	@Test
 	void sucessWhenConvertViewToTagName() {
 		
-		String result = viewConverter.toString(new View());
+		String result = converter.toString(new View());
 		assertNotNull(result);
 		assertEquals("view", result);
 		
@@ -35,14 +47,14 @@ class ViewTagConverterTest {
 	@Test
 	void failWhenConvertTagNameToViewWithTagUnmapped() {
 		assertThrows(IllegalArgumentException.class, () -> {
-			viewConverter.toComponent("Other");
+			converter.toComponent("Other");
 		});
 	}
 
 	@Test
 	void failWhenConvertViewToTagNameWithComponentUnmapped() {
 		assertThrows(IllegalArgumentException.class, () -> {
-			viewConverter.toString(new UnmappedView());
+			converter.toString(new UnmappedView());
 		});
 	}
 	
