@@ -15,12 +15,12 @@ public class BatoceraFactory extends ComponentFactory {
 	private BatoceraBuilder builder;
 
 	public BatoceraFactory() {
-		this(new BatoceraInstanceFactory());
+		this(new BatoceraBuilder());
 	}
 
-	public BatoceraFactory(BatoceraInstanceFactory instaceFactory) {
-		super(instaceFactory);
-		builder = new BatoceraBuilder(instaceFactory);
+	public BatoceraFactory(BatoceraBuilder builder) {
+		super(builder);
+		this.builder = builder;
 	}
 	
 	/**

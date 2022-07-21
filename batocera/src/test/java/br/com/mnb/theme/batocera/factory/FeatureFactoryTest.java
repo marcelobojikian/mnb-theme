@@ -7,33 +7,34 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import br.com.mnb.theme.batocera.xml.feature.AbstractFeature;
+import br.com.mnb.theme.core.factory.SimpleFactory;
 
 class FeatureFactoryTest {
 
-	FeatureFactory instaceFactory;
+	SimpleFactory<AbstractFeature> factory;
 
 	@BeforeEach
 	public void init() {
-		instaceFactory = new BatoceraInstanceFactory();
+		factory = new SimpleFactory<AbstractFeature>();
 	}
 
 	@Test
 	void sucessWhenCreateFeature() {
-		FeatureTest feature = instaceFactory.createFeature(FeatureTest.class);
+		FeatureTest feature = factory.create(FeatureTest.class);
 		assertNotNull(feature);
 	}
 
 	@Test
 	void failWhenCreateFeatureWithNullParameter() {
 		assertThrows(NullPointerException.class, () -> {
-			instaceFactory.createFeature(null);
+			factory.create(null);
 		});
 	}
 
 	@Test
 	void failWhenCreateFeatureWithInvalidParameter() {
 		assertThrows(RuntimeException.class, () -> {
-			instaceFactory.createFeature(AbstractFeature.class);
+			factory.create(AbstractFeature.class);
 		});
 	}
 

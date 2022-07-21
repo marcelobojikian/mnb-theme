@@ -1,16 +1,16 @@
 package br.com.mnb.theme.emulationstation.factory;
 
-import br.com.mnb.theme.core.factory.InstanceFactory;
+import br.com.mnb.theme.core.builder.ComponentBuilder;
 import br.com.mnb.theme.emulationstation.xml.theme.EmulationStationTheme;
 
 public class EmulationStationFactory extends ComponentFactory {
 
 	public EmulationStationFactory() {
-		super(new InstanceFactory());
+		super();
 	}
 
-	public EmulationStationFactory(InstanceFactory instaceFactory) {
-		super(instaceFactory);
+	public EmulationStationFactory(ComponentBuilder builder) {
+		super(builder);
 	}
 	
 	/**

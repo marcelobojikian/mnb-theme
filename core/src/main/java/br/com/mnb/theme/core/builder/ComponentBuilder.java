@@ -5,7 +5,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import br.com.mnb.theme.core.factory.InstanceFactory;
+import br.com.mnb.theme.core.factory.ExtensionFactory;
+import br.com.mnb.theme.core.factory.SimpleFactory;
 import br.com.mnb.theme.core.xml.Content;
 import br.com.mnb.theme.core.xml.element.AbstractElement;
 import br.com.mnb.theme.core.xml.element.CommonElement;
@@ -14,15 +15,19 @@ import br.com.mnb.theme.core.xml.view.AbstractViewElement;
 
 public class ComponentBuilder implements ThemeBuilder, ViewBuilder, ElementBuilder {
 
-	private InstanceFactory instaceFactory;
+	private ExtensionFactory<AbstractTheme> themeFactory;
+	private ExtensionFactory<AbstractElement> elementFactory;
+	private ExtensionFactory<AbstractViewElement> viewFactory;
 	
-	public ComponentBuilder(InstanceFactory instaceFactory) {
-		this.instaceFactory = instaceFactory;
+	public ComponentBuilder() {
+		this.themeFactory = new SimpleFactory<AbstractTheme>();
+		this.elementFactory = new SimpleFactory<AbstractElement>();
+		this.viewFactory = new SimpleFactory<AbstractViewElement>();
 	}
 
 	@Override
 	public <T extends AbstractTheme> T createTheme(Class<T> clazz, Integer version) {
-		T theme = instaceFactory.createTheme(clazz);
+		T theme = themeFactory.create(clazz);
 		theme.setFormatVersion(version);
 		theme.setViewElements(new ArrayList<>());
 		theme.setIncludes(new ArrayList<>());
@@ -31,7 +36,7 @@ public class ComponentBuilder implements ThemeBuilder, ViewBuilder, ElementBuild
 
 	@Override
 	public <T extends AbstractTheme> T createTheme(Class<T> clazz, Integer version, String... includes) {
-		T theme = instaceFactory.createTheme(clazz);
+		T theme = themeFactory.create(clazz);
 		theme.setFormatVersion(version);
 		theme.setViewElements(new ArrayList<>());
 		theme.setIncludes(new ArrayList<>(Arrays.asList(includes)));
@@ -40,7 +45,7 @@ public class ComponentBuilder implements ThemeBuilder, ViewBuilder, ElementBuild
 
 	@Override
 	public <T extends AbstractViewElement> T createView(Class<T> clazz, String name) {
-		T view = instaceFactory.createView(clazz);
+		T view = viewFactory.create(clazz);
 		view.setName(name);
 		view.setElements(new ArrayList<>());
 		return view;
@@ -48,7 +53,7 @@ public class ComponentBuilder implements ThemeBuilder, ViewBuilder, ElementBuild
 
 	@Override
 	public <T extends AbstractViewElement> T createView(Class<T> clazz, String name, CommonElement... elements) {
-		T view = instaceFactory.createView(clazz);
+		T view = viewFactory.create(clazz);
 		view.setName(name);
 		view.setElements(new ArrayList<>(Arrays.asList(elements)));
 		return view;
@@ -56,7 +61,7 @@ public class ComponentBuilder implements ThemeBuilder, ViewBuilder, ElementBuild
 
 	@Override
 	public <T extends AbstractViewElement> T createView(Class<T> clazz, String name, List<CommonElement> elements) {
-		T view = instaceFactory.createView(clazz);
+		T view = viewFactory.create(clazz);
 		view.setName(name);
 		view.setElements(elements);
 		return view;
@@ -64,7 +69,7 @@ public class ComponentBuilder implements ThemeBuilder, ViewBuilder, ElementBuild
 
 	@Override
 	public <T extends AbstractElement> T createElement(Class<T> clazz, String name) {
-		T element = instaceFactory.createElement(clazz);
+		T element = elementFactory.create(clazz);
 		element.setName(name);
 		element.setExtra(false);
 		element.setContent(new Content());
@@ -73,7 +78,7 @@ public class ComponentBuilder implements ThemeBuilder, ViewBuilder, ElementBuild
 
 	@Override
 	public <T extends AbstractElement> T createElement(Class<T> clazz, String name, boolean extra) {
-		T element = instaceFactory.createElement(clazz);
+		T element = elementFactory.create(clazz);
 		element.setName(name);
 		element.setExtra(extra);
 		element.setContent(new Content());
@@ -82,7 +87,7 @@ public class ComponentBuilder implements ThemeBuilder, ViewBuilder, ElementBuild
 
 	@Override
 	public <T extends AbstractElement> T createElement(Class<T> clazz, String name, Map<String, String> content) {
-		T element = instaceFactory.createElement(clazz);
+		T element = elementFactory.create(clazz);
 		element.setName(name);
 		element.setExtra(false);
 		element.setContent(new Content(content));
@@ -97,6 +102,30 @@ public class ComponentBuilder implements ThemeBuilder, ViewBuilder, ElementBuild
 		element.setExtra(extra);
 		element.setContent(new Content(content));
 		return (T) element;
+	}
+
+	public ExtensionFactory<AbstractTheme> getThemeFactory() {
+		return themeFactory;
+	}
+
+	public void setThemeFactory(ExtensionFactory<AbstractTheme> themeFactory) {
+		this.themeFactory = themeFactory;
+	}
+
+	public ExtensionFactory<AbstractElement> getElementFactory() {
+		return elementFactory;
+	}
+
+	public void setElementFactory(ExtensionFactory<AbstractElement> elementFactory) {
+		this.elementFactory = elementFactory;
+	}
+
+	public ExtensionFactory<AbstractViewElement> getViewFactory() {
+		return viewFactory;
+	}
+
+	public void setViewFactory(ExtensionFactory<AbstractViewElement> viewFactory) {
+		this.viewFactory = viewFactory;
 	}
 
 }

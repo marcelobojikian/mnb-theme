@@ -4,16 +4,16 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
 import org.junit.jupiter.api.Test;
 
-import br.com.mnb.theme.core.factory.InstanceFactory;
+import br.com.mnb.theme.core.builder.ComponentBuilder;
 import br.com.mnb.theme.emulationstation.xml.theme.EmulationStationTheme;
 
 class EmulationStationFactoryTest {
 
 	@Test
-	void sucessWhenCreateEmulationStationThemeWithInstanceFactory() {
+	void sucessWhenCreateEmulationStationThemeWithBuilder() {
 
-		InstanceFactory instanceFactory = new InstanceFactory();
-		EmulationStationFactory factory = new EmulationStationFactory(instanceFactory);
+		ComponentBuilder builder = new ComponentBuilder();
+		EmulationStationFactory factory = new EmulationStationFactory(builder);
 
 		EmulationStationTheme theme = factory.createTheme(4);
 		assertInstanceOf(EmulationStationTheme.class, theme);

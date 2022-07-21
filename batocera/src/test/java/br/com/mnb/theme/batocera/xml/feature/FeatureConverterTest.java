@@ -10,20 +10,22 @@ import static org.mockito.Mockito.when;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import br.com.mnb.theme.batocera.factory.FeatureFactory;
+import br.com.mnb.theme.core.factory.SimpleFactory;
+import br.com.mnb.theme.core.xml.converter.SimpleConverter;
 
 class FeatureConverterTest {
 
-	FeatureConverter converter;
+	SimpleConverter<AbstractFeature> converter;
 	
 	@BeforeEach
 	public void setup() {
 		
-		FeatureFactory factory = mock(FeatureFactory.class);
-		when(factory.createFeature(CarouselFeature.class)).thenReturn(new CarouselFeature());
-		when(factory.createFeature(VideoFeature.class)).thenReturn(new VideoFeature());
+		@SuppressWarnings("unchecked")
+		SimpleFactory<AbstractFeature> factory = mock(SimpleFactory.class);
+		when(factory.create(CarouselFeature.class)).thenReturn(new CarouselFeature());
+		when(factory.create(VideoFeature.class)).thenReturn(new VideoFeature());
 		
-		converter = new FeatureConverter(factory);
+		converter = new SimpleConverter<AbstractFeature>(factory);
 		converter.registerElement("carousel", CarouselFeature.class);
 		converter.registerElement("video", VideoFeature.class);
 	}

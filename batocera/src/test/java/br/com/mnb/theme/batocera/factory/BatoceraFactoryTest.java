@@ -10,6 +10,7 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import br.com.mnb.theme.batocera.builder.BatoceraBuilder;
 import br.com.mnb.theme.batocera.xml.element.BatoceraCarousel;
 import br.com.mnb.theme.batocera.xml.element.Text;
 import br.com.mnb.theme.batocera.xml.element.Video;
@@ -31,10 +32,10 @@ class BatoceraFactoryTest {
 	}
 
 	@Test
-	void sucessWhenCreateBatoceraThemeWithInstanceFactory() {
+	void sucessWhenCreateBatoceraThemeWithBatoceraBuilder() {
 
-		BatoceraInstanceFactory instanceFactory = new BatoceraInstanceFactory();
-		BatoceraFactory factory = new BatoceraFactory(instanceFactory);
+		BatoceraBuilder builder = new BatoceraBuilder();
+		BatoceraFactory factory = new BatoceraFactory(builder);
 
 		BatoceraTheme theme = factory.createTheme(4);
 		assertInstanceOf(BatoceraTheme.class, theme);

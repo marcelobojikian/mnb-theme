@@ -15,7 +15,6 @@ import br.com.mnb.theme.batocera.xml.element.TextList;
 import br.com.mnb.theme.batocera.xml.element.Video;
 import br.com.mnb.theme.batocera.xml.view.View;
 import br.com.mnb.theme.core.builder.ComponentBuilder;
-import br.com.mnb.theme.core.factory.InstanceFactory;
 import br.com.mnb.theme.core.xml.element.CommonElement;
 import br.com.mnb.theme.core.xml.theme.AbstractTheme;
 
@@ -24,11 +23,7 @@ class ComponentFactory {
 	private ComponentBuilder builder;
 
 	public ComponentFactory() {
-		this(new InstanceFactory());
-	}
-
-	public ComponentFactory(InstanceFactory instaceFactory) {
-		this(new ComponentBuilder(instaceFactory));
+		this(new ComponentBuilder());
 	}
 
 	public ComponentFactory(ComponentBuilder builder) {

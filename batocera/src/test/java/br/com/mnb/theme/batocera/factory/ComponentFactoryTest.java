@@ -21,7 +21,6 @@ import br.com.mnb.theme.batocera.xml.element.Video;
 import br.com.mnb.theme.batocera.xml.theme.BatoceraTheme;
 import br.com.mnb.theme.batocera.xml.view.View;
 import br.com.mnb.theme.core.builder.ComponentBuilder;
-import br.com.mnb.theme.core.factory.InstanceFactory;
 
 class ComponentFactoryTest {
 
@@ -30,8 +29,7 @@ class ComponentFactoryTest {
 	@Test
 	void sucessWhenInstanceWithBuilder() {
 		
-		InstanceFactory instanceFactory = new InstanceFactory();
-		ComponentBuilder builder = new ComponentBuilder(instanceFactory);
+		ComponentBuilder builder = new ComponentBuilder();
 		ComponentFactory factory= new ComponentFactory(builder);
 		
 		BatoceraTheme theme = factory.createTheme(BatoceraTheme.class, 4);

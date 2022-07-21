@@ -3,8 +3,6 @@ package br.com.mnb.theme.core.xml.converter;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.security.NoTypePermission;
 
-import br.com.mnb.theme.core.factory.ElementFactory;
-import br.com.mnb.theme.core.factory.InstanceFactory;
 import br.com.mnb.theme.core.factory.SimpleFactory;
 import br.com.mnb.theme.core.model.Element;
 import br.com.mnb.theme.core.model.SecondElement;
@@ -17,10 +15,6 @@ public class ViewXmlConverter extends XmlConverter<View> {
 	ElementXStreamConverter xmlConverter;
 	
 	public ViewXmlConverter() {
-		this(new InstanceFactory());
-	}
-	
-	public ViewXmlConverter(ElementFactory instanceFactory) {
 
 		SimpleFactory<AbstractElement> factory = new SimpleFactory<AbstractElement>();
 		SimpleConverter<AbstractElement> converter = new SimpleConverter<AbstractElement>(factory);

@@ -10,7 +10,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import br.com.mnb.theme.core.builder.ComponentBuilder;
-import br.com.mnb.theme.core.factory.InstanceFactory;
 import br.com.mnb.theme.emulationstation.xml.element.Datetime;
 import br.com.mnb.theme.emulationstation.xml.element.HelpSystem;
 import br.com.mnb.theme.emulationstation.xml.element.Image;
@@ -35,8 +34,7 @@ public class ComponentFactoryTest {
 	@Test
 	void sucessWhenInstanceWithBuilder() {
 		
-		InstanceFactory instanceFactory = new InstanceFactory();
-		ComponentBuilder builder = new ComponentBuilder(instanceFactory);
+		ComponentBuilder builder = new ComponentBuilder();
 		ComponentFactory factory= new ComponentFactory(builder);
 		
 		EmulationStationTheme theme = factory.createTheme(EmulationStationTheme.class, 4);
