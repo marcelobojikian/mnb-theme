@@ -3,7 +3,6 @@ package br.com.mnb.theme.batocera.xml.converter;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.security.NoTypePermission;
 
-import br.com.mnb.theme.batocera.factory.BatoceraInstanceFactory;
 import br.com.mnb.theme.batocera.xml.element.BatoceraCarousel;
 import br.com.mnb.theme.batocera.xml.element.Datetime;
 import br.com.mnb.theme.batocera.xml.element.HelpSystem;
@@ -15,28 +14,29 @@ import br.com.mnb.theme.batocera.xml.element.Text;
 import br.com.mnb.theme.batocera.xml.element.TextList;
 import br.com.mnb.theme.batocera.xml.element.Video;
 import br.com.mnb.theme.batocera.xml.view.View;
-import br.com.mnb.theme.core.factory.ElementFactory;
+import br.com.mnb.theme.core.factory.ExtensionFactory;
+import br.com.mnb.theme.core.factory.SimpleFactory;
 import br.com.mnb.theme.core.xml.Content;
 import br.com.mnb.theme.core.xml.converter.ContentXStreamConverter;
 import br.com.mnb.theme.core.xml.converter.ElementXStreamConverter;
+import br.com.mnb.theme.core.xml.converter.SimpleConverter;
 import br.com.mnb.theme.core.xml.converter.XmlConverter;
 import br.com.mnb.theme.core.xml.element.AbstractElement;
-import br.com.mnb.theme.core.xml.element.ElementConverter;
 
 public class ElementXmlConverter extends XmlConverter<AbstractElement> {
 	
 	ElementXStreamConverter xmlConverter;
 	
 	public ElementXmlConverter() {
-		this(new BatoceraInstanceFactory());
+		this(new SimpleFactory<AbstractElement>());
 	}
 	
-	public ElementXmlConverter(ElementFactory instanceFactory) {	
-		xmlConverter = getElementXmlConverter(instanceFactory);
+	public ElementXmlConverter(ExtensionFactory<AbstractElement> factory) {	
+		xmlConverter = getElementXmlConverter(factory);
 	}
-	
-	public ElementXStreamConverter getElementXmlConverter(ElementFactory factory) {
-		ElementConverter converter = new ElementConverter(factory);
+
+	public ElementXStreamConverter getElementXmlConverter(ExtensionFactory<AbstractElement> factory) {
+		SimpleConverter<AbstractElement> converter = new SimpleConverter<AbstractElement>(factory);
 		converter.registerElement("text", Text.class);
 		converter.registerElement("image", Image.class);
 		converter.registerElement("datetime", Datetime.class);

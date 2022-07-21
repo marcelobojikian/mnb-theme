@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.security.NoTypePermission;
 
-import br.com.mnb.theme.core.factory.InstanceFactory;
+import br.com.mnb.theme.core.factory.SimpleFactory;
 import br.com.mnb.theme.core.model.Element;
 import br.com.mnb.theme.core.model.SecondElement;
 import br.com.mnb.theme.core.model.Theme;
@@ -22,7 +22,8 @@ import br.com.mnb.theme.core.model.View;
 import br.com.mnb.theme.core.xml.Content;
 import br.com.mnb.theme.core.xml.converter.ContentXStreamConverter;
 import br.com.mnb.theme.core.xml.converter.ElementXStreamConverter;
-import br.com.mnb.theme.core.xml.element.ElementConverter;
+import br.com.mnb.theme.core.xml.converter.SimpleConverter;
+import br.com.mnb.theme.core.xml.element.AbstractElement;
 import br.com.mnb.theme.core.xml.view.ViewElement;
 
 class AbstractThemeTest {
@@ -32,7 +33,8 @@ class AbstractThemeTest {
 	@BeforeEach
 	public void setup() {
 
-		ElementConverter converter = new ElementConverter(new InstanceFactory());
+		SimpleFactory<AbstractElement> factory = new SimpleFactory<AbstractElement>();
+		SimpleConverter<AbstractElement> converter = new SimpleConverter<AbstractElement>(factory);
 		converter.registerElement("element", Element.class);
 		converter.registerElement("second", SecondElement.class);
 		

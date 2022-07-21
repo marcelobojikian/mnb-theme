@@ -5,11 +5,12 @@ import com.thoughtworks.xstream.security.NoTypePermission;
 
 import br.com.mnb.theme.core.factory.ElementFactory;
 import br.com.mnb.theme.core.factory.InstanceFactory;
+import br.com.mnb.theme.core.factory.SimpleFactory;
 import br.com.mnb.theme.core.model.Element;
 import br.com.mnb.theme.core.model.SecondElement;
 import br.com.mnb.theme.core.xml.Content;
+import br.com.mnb.theme.core.xml.element.AbstractElement;
 import br.com.mnb.theme.core.xml.element.CommonElement;
-import br.com.mnb.theme.core.xml.element.ElementConverter;
 
 public class ElementXmlConverter extends XmlConverter<CommonElement> {
 	
@@ -21,7 +22,8 @@ public class ElementXmlConverter extends XmlConverter<CommonElement> {
 	
 	public ElementXmlConverter(ElementFactory instanceFactory) {
 		
-		ElementConverter converter = new ElementConverter(instanceFactory);
+		SimpleFactory<AbstractElement> factory = new SimpleFactory<AbstractElement>();
+		SimpleConverter<AbstractElement> converter = new SimpleConverter<AbstractElement>(factory);
 		converter.registerElement("element", Element.class);
 		converter.registerElement("second", SecondElement.class);
 		

@@ -8,11 +8,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import br.com.mnb.theme.core.factory.InstanceFactory;
+import br.com.mnb.theme.core.factory.SimpleFactory;
+import br.com.mnb.theme.core.xml.converter.SimpleConverter;
 import br.com.mnb.theme.core.xml.element.AbstractElement;
-import br.com.mnb.theme.core.xml.element.ElementConverter;
 import br.com.mnb.theme.core.xml.view.AbstractViewElement;
-import br.com.mnb.theme.core.xml.view.ViewConverter;
 import br.com.mnb.theme.emulationstation.xml.element.Datetime;
 import br.com.mnb.theme.emulationstation.xml.element.HelpSystem;
 import br.com.mnb.theme.emulationstation.xml.element.Image;
@@ -26,13 +25,13 @@ import br.com.mnb.theme.emulationstation.xml.view.View;
 
 public class AllConverterTest {
 	
-	private ElementConverter elementConverter;
-	private ViewConverter viewConverter;
+	private SimpleConverter<AbstractElement> elementConverter;
+	private SimpleConverter<AbstractViewElement> viewConverter;
 	
 	@BeforeEach
 	public void setup() {
 		
-		elementConverter = new ElementConverter(new InstanceFactory());
+		elementConverter = new SimpleConverter<AbstractElement>(new SimpleFactory<AbstractElement>());
 		elementConverter.registerElement("text", Text.class);
 		elementConverter.registerElement("image", Image.class);
 		elementConverter.registerElement("datetime", Datetime.class);
@@ -43,8 +42,8 @@ public class AllConverterTest {
 		elementConverter.registerElement("textlist", TextList.class);
 		elementConverter.registerElement("video", Video.class);
 		
-		viewConverter = new ViewConverter(new InstanceFactory());
-		viewConverter.registerView("view", View.class);
+		viewConverter = new SimpleConverter<AbstractViewElement>(new SimpleFactory<AbstractViewElement>());
+		viewConverter.registerElement("view", View.class);
 		
 	}
 

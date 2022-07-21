@@ -3,8 +3,6 @@ package br.com.mnb.theme.batocera.xml.converter;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.security.NoTypePermission;
 
-import br.com.mnb.theme.batocera.factory.BatoceraInstanceFactory;
-import br.com.mnb.theme.batocera.factory.FeatureFactory;
 import br.com.mnb.theme.batocera.xml.element.BatoceraCarousel;
 import br.com.mnb.theme.batocera.xml.element.Datetime;
 import br.com.mnb.theme.batocera.xml.element.HelpSystem;
@@ -15,18 +13,20 @@ import br.com.mnb.theme.batocera.xml.element.Sound;
 import br.com.mnb.theme.batocera.xml.element.Text;
 import br.com.mnb.theme.batocera.xml.element.TextList;
 import br.com.mnb.theme.batocera.xml.element.Video;
+import br.com.mnb.theme.batocera.xml.feature.AbstractFeature;
 import br.com.mnb.theme.batocera.xml.feature.BatoceraFeature;
 import br.com.mnb.theme.batocera.xml.feature.CarouselFeature;
-import br.com.mnb.theme.batocera.xml.feature.FeatureConverter;
 import br.com.mnb.theme.batocera.xml.feature.VideoFeature;
 import br.com.mnb.theme.batocera.xml.theme.BatoceraTheme;
 import br.com.mnb.theme.batocera.xml.view.View;
-import br.com.mnb.theme.core.factory.ElementFactory;
+import br.com.mnb.theme.core.factory.ExtensionFactory;
+import br.com.mnb.theme.core.factory.SimpleFactory;
 import br.com.mnb.theme.core.xml.Content;
 import br.com.mnb.theme.core.xml.converter.ContentXStreamConverter;
 import br.com.mnb.theme.core.xml.converter.ElementXStreamConverter;
+import br.com.mnb.theme.core.xml.converter.SimpleConverter;
 import br.com.mnb.theme.core.xml.converter.XmlConverter;
-import br.com.mnb.theme.core.xml.element.ElementConverter;
+import br.com.mnb.theme.core.xml.element.AbstractElement;
 
 public class BatoceraXmlConverter extends XmlConverter<BatoceraTheme> {
 	
@@ -36,23 +36,24 @@ public class BatoceraXmlConverter extends XmlConverter<BatoceraTheme> {
 	private ElementXStreamConverter elementXmlConverter;
 	
 	public BatoceraXmlConverter() {
-		this(new BatoceraInstanceFactory()); 
+		this(new SimpleFactory<AbstractElement>(), new SimpleFactory<AbstractFeature>()); 
 	}
 	
-	public BatoceraXmlConverter(BatoceraInstanceFactory instanceFactory) {
-		elementXmlConverter = getElementXmlConverter(instanceFactory);
-		featureXmlConverter = getFeatureXmlConverter(instanceFactory);
+	public BatoceraXmlConverter(ExtensionFactory<AbstractElement> elementFactory,
+			ExtensionFactory<AbstractFeature> featureFactory) {
+		elementXmlConverter = getElementXmlConverter(elementFactory);
+		featureXmlConverter = getFeatureXmlConverter(featureFactory);
 	}
 	
-	public FeatureXStreamConverter getFeatureXmlConverter(FeatureFactory factory) {
-		FeatureConverter converter = new FeatureConverter(factory);
+	public FeatureXStreamConverter getFeatureXmlConverter(ExtensionFactory<AbstractFeature> factory) {
+		SimpleConverter<AbstractFeature> converter = new SimpleConverter<AbstractFeature>(factory);
 		converter.registerElement("carousel", CarouselFeature.class);
 		converter.registerElement("video", VideoFeature.class);
 		return new FeatureXStreamConverter(converter);
 	}
 	
-	public ElementXStreamConverter getElementXmlConverter(ElementFactory factory) {
-		ElementConverter converter = new ElementConverter(factory);
+	public ElementXStreamConverter getElementXmlConverter(ExtensionFactory<AbstractElement> factory) {
+		SimpleConverter<AbstractElement> converter = new SimpleConverter<AbstractElement>(factory);
 		converter.registerElement("text", Text.class);
 		converter.registerElement("image", Image.class);
 		converter.registerElement("datetime", Datetime.class);

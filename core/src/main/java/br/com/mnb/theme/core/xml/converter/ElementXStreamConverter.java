@@ -6,10 +6,8 @@ import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 
-import br.com.mnb.theme.core.factory.ElementFactory;
 import br.com.mnb.theme.core.xml.Content;
 import br.com.mnb.theme.core.xml.element.AbstractElement;
-import br.com.mnb.theme.core.xml.element.ElementConverter;
 
 public class ElementXStreamConverter implements Converter {
 	

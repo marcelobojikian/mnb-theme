@@ -10,20 +10,23 @@ import static org.mockito.Mockito.when;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import br.com.mnb.theme.core.factory.ThemeFactory;
+import br.com.mnb.theme.core.factory.SimpleFactory;
 import br.com.mnb.theme.core.model.Theme;
+import br.com.mnb.theme.core.xml.converter.SimpleConverter;
 
 class ThemeConverterTest {
 	
-	ThemeConverter converter;
+	SimpleConverter<AbstractTheme> converter;
 	
 	@BeforeEach
 	public void setup() {
-		ThemeFactory factory = mock(ThemeFactory.class);
-		when(factory.createTheme(Theme.class)).thenReturn(new Theme());
 		
-		converter = new ThemeConverter(factory);
-		converter.registerTheme("theme", Theme.class);
+		@SuppressWarnings("unchecked")
+		SimpleFactory<AbstractTheme> factory = mock(SimpleFactory.class);
+		when(factory.create(Theme.class)).thenReturn(new Theme());
+		
+		converter = new SimpleConverter<AbstractTheme>(factory);
+		converter.registerElement("theme", Theme.class);
 	}
 
 	@Test

@@ -10,20 +10,23 @@ import static org.mockito.Mockito.when;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import br.com.mnb.theme.core.factory.ViewFactory;
+import br.com.mnb.theme.core.factory.SimpleFactory;
 import br.com.mnb.theme.core.model.View;
+import br.com.mnb.theme.core.xml.converter.SimpleConverter;
 
 class ViewConverterTest {
 	
-	ViewConverter converter;
+	SimpleConverter<AbstractViewElement> converter;
 	
 	@BeforeEach
 	public void setup() {
-		ViewFactory factory = mock(ViewFactory.class);
-		when(factory.createView(View.class)).thenReturn(new View());
+
+		@SuppressWarnings("unchecked")
+		SimpleFactory<AbstractViewElement> factory = mock(SimpleFactory.class);
+		when(factory.create(View.class)).thenReturn(new View());
 		
-		converter = new ViewConverter(factory);
-		converter.registerView("view", View.class);
+		converter = new SimpleConverter<AbstractViewElement>(factory);
+		converter.registerElement("view", View.class);
 	}
 
 	@Test

@@ -1,9 +1,6 @@
-package br.com.mnb.theme.core.xml.element;
+package br.com.mnb.theme.core.xml.converter;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertInstanceOf;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -13,9 +10,9 @@ import org.junit.jupiter.api.Test;
 import br.com.mnb.theme.core.factory.SimpleFactory;
 import br.com.mnb.theme.core.model.Element;
 import br.com.mnb.theme.core.model.SecondElement;
-import br.com.mnb.theme.core.xml.converter.SimpleConverter;
+import br.com.mnb.theme.core.xml.element.AbstractElement;
 
-class ElementConverterTest {
+class SimpleConverterTest {
 
 	SimpleConverter<AbstractElement> converter;
 	

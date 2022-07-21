@@ -3,13 +3,14 @@ package br.com.mnb.theme.emulationstation.xml.converter;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.security.NoTypePermission;
 
-import br.com.mnb.theme.core.factory.ElementFactory;
-import br.com.mnb.theme.core.factory.InstanceFactory;
+import br.com.mnb.theme.core.factory.ExtensionFactory;
+import br.com.mnb.theme.core.factory.SimpleFactory;
 import br.com.mnb.theme.core.xml.Content;
 import br.com.mnb.theme.core.xml.converter.ContentXStreamConverter;
 import br.com.mnb.theme.core.xml.converter.ElementXStreamConverter;
+import br.com.mnb.theme.core.xml.converter.SimpleConverter;
 import br.com.mnb.theme.core.xml.converter.XmlConverter;
-import br.com.mnb.theme.core.xml.element.ElementConverter;
+import br.com.mnb.theme.core.xml.element.AbstractElement;
 import br.com.mnb.theme.emulationstation.xml.element.Datetime;
 import br.com.mnb.theme.emulationstation.xml.element.HelpSystem;
 import br.com.mnb.theme.emulationstation.xml.element.Image;
@@ -28,16 +29,16 @@ public class ThemeXmlConverter extends XmlConverter<EmulationStationTheme> {
 	private ContentXStreamConverter contentXmlConverter;
 	
 	public ThemeXmlConverter() {
-		this(new InstanceFactory()); 
+		this(new SimpleFactory<AbstractElement>()); 
 	}
 	
-	public ThemeXmlConverter(ElementFactory instaceFactory) {
+	public ThemeXmlConverter(ExtensionFactory<AbstractElement> factory) {
 		contentXmlConverter = new ContentXStreamConverter();
-		elementXmlConverter = getElementXmlConverter(instaceFactory);
+		elementXmlConverter = getElementXmlConverter(factory);
 	}
 	
-	public ElementXStreamConverter getElementXmlConverter(ElementFactory factory) {
-		ElementConverter converter = new ElementConverter(factory);
+	public ElementXStreamConverter getElementXmlConverter(ExtensionFactory<AbstractElement> factory) {
+		SimpleConverter<AbstractElement> converter = new SimpleConverter<AbstractElement>(factory);
 		converter.registerElement("text", Text.class);
 		converter.registerElement("image", Image.class);
 		converter.registerElement("datetime", Datetime.class);
