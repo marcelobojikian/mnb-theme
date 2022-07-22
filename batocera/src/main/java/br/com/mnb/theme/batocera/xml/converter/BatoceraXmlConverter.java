@@ -1,7 +1,6 @@
 package br.com.mnb.theme.batocera.xml.converter;
 
 import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.security.NoTypePermission;
 
 import br.com.mnb.theme.batocera.xml.element.BatoceraCarousel;
 import br.com.mnb.theme.batocera.xml.element.Datetime;
@@ -22,77 +21,54 @@ import br.com.mnb.theme.batocera.xml.view.View;
 import br.com.mnb.theme.core.factory.ExtensionFactory;
 import br.com.mnb.theme.core.factory.SimpleFactory;
 import br.com.mnb.theme.core.xml.Content;
-import br.com.mnb.theme.core.xml.converter.ContentXStreamConverter;
-import br.com.mnb.theme.core.xml.converter.ElementXStreamConverter;
-import br.com.mnb.theme.core.xml.converter.SimpleConverter;
+import br.com.mnb.theme.core.xml.converter.NamedTagConverter;
+import br.com.mnb.theme.core.xml.converter.XStreamConfigure;
 import br.com.mnb.theme.core.xml.converter.XmlConverter;
 import br.com.mnb.theme.core.xml.element.AbstractElement;
 
-public class BatoceraXmlConverter extends XmlConverter<BatoceraTheme> {
+public class BatoceraXmlConverter implements XStreamConfigure {
 	
-	private ContentXStreamConverter contentXmlConverter = new ContentXStreamConverter();
-	
-	private FeatureXStreamConverter featureXmlConverter;
-	private ElementXStreamConverter elementXmlConverter;
+	private XmlConverter converter;	
+	private NamedTagConverter<AbstractFeature> featureConverter;
 	
 	public BatoceraXmlConverter() {
 		this(new SimpleFactory<AbstractElement>(), new SimpleFactory<AbstractFeature>()); 
 	}
 	
-	public BatoceraXmlConverter(ExtensionFactory<AbstractElement> elementFactory,
-			ExtensionFactory<AbstractFeature> featureFactory) {
-		elementXmlConverter = getElementXmlConverter(elementFactory);
-		featureXmlConverter = getFeatureXmlConverter(featureFactory);
+	public BatoceraXmlConverter(ExtensionFactory<AbstractElement> elementFactory, ExtensionFactory<AbstractFeature> featureFactory) {
+		converter = new XmlConverter(this);
+		converter.setElementConverter(new NamedTagConverter<AbstractElement>(elementFactory));		
+		converter.putTag("text", Text.class);
+		converter.putTag("image", Image.class);
+		converter.putTag("datetime", Datetime.class);
+		converter.putTag("helpsystem", HelpSystem.class);
+		converter.putTag("ninepatch", Ninepatch.class);
+		converter.putTag("rating", Rating.class);
+		converter.putTag("sound", Sound.class);
+		converter.putTag("textlist", TextList.class);
+		converter.putTag("video", Video.class);
+		converter.putTag("carousel", BatoceraCarousel.class);
+
+		setFeatureConverter(new NamedTagConverter<AbstractFeature>(featureFactory));
+		getFeatureConverter().put("carousel", CarouselFeature.class);
+		getFeatureConverter().put("video", VideoFeature.class);
+		
 	}
-	
-	public FeatureXStreamConverter getFeatureXmlConverter(ExtensionFactory<AbstractFeature> factory) {
-		SimpleConverter<AbstractFeature> converter = new SimpleConverter<AbstractFeature>(factory);
-		converter.registerElement("carousel", CarouselFeature.class);
-		converter.registerElement("video", VideoFeature.class);
-		return new FeatureXStreamConverter(converter);
+
+	public String toXML(BatoceraTheme theme) {
+		return converter.toXML(theme);
 	}
-	
-	public ElementXStreamConverter getElementXmlConverter(ExtensionFactory<AbstractElement> factory) {
-		SimpleConverter<AbstractElement> converter = new SimpleConverter<AbstractElement>(factory);
-		converter.registerElement("text", Text.class);
-		converter.registerElement("image", Image.class);
-		converter.registerElement("datetime", Datetime.class);
-		converter.registerElement("helpsystem", HelpSystem.class);
-		converter.registerElement("ninepatch", Ninepatch.class);
-		converter.registerElement("rating", Rating.class);
-		converter.registerElement("sound", Sound.class);
-		converter.registerElement("textlist", TextList.class);
-		converter.registerElement("video", Video.class);
-		converter.registerElement("carousel", BatoceraCarousel.class);
-		return new ElementXStreamConverter(converter);
+
+	public NamedTagConverter<AbstractFeature> getFeatureConverter() {
+		return featureConverter;
+	}
+
+	public void setFeatureConverter(NamedTagConverter<AbstractFeature> featureConverter) {
+		this.featureConverter = featureConverter;
 	}
 
 	@Override
-	public XStream getXStream() {
-
-		XStream  xstream = new XStream();
-
-		xstream.autodetectAnnotations(true);
-		xstream.ignoreUnknownElements();
-
-		xstream.registerConverter(contentXmlConverter);
-		xstream.registerConverter(elementXmlConverter);
-
-		xstream.processAnnotations(BatoceraTheme.class);
-		xstream.processAnnotations(Rating.class);
-		xstream.processAnnotations(Datetime.class);
-		xstream.processAnnotations(HelpSystem.class);
-		xstream.processAnnotations(TextList.class);
-		xstream.processAnnotations(Video.class);
-		xstream.processAnnotations(Sound.class);
-		xstream.processAnnotations(View.class);
-		xstream.processAnnotations(Text.class);
-		xstream.processAnnotations(Image.class);
-		xstream.processAnnotations(Ninepatch.class);
-		xstream.processAnnotations(Content.class);
-		
-		xstream.addPermission(NoTypePermission.NONE);
-		
+	public void defineAllowTypes(XStream xstream) {		
 		xstream.allowTypes(new Class[] {
 				Rating.class,
 				Datetime.class,
@@ -104,27 +80,45 @@ public class BatoceraXmlConverter extends XmlConverter<BatoceraTheme> {
 				Text.class,
 				Image.class,
 				Ninepatch.class,
-				Content.class });
+				Content.class,
+				// Batocera
+				BatoceraTheme.class,
+				BatoceraCarousel.class,
+				BatoceraFeature.class, // nao esta no processAnnotations
+				CarouselFeature.class,
+				VideoFeature.class});		
+	}
 
+	@Override
+	public void defineProcessAnnotations(XStream xstream) {
+		xstream.processAnnotations(Rating.class);
+		xstream.processAnnotations(Datetime.class);
+		xstream.processAnnotations(HelpSystem.class);
+		xstream.processAnnotations(TextList.class);
+		xstream.processAnnotations(Video.class);
+		xstream.processAnnotations(Sound.class);
+		xstream.processAnnotations(View.class);
+		xstream.processAnnotations(Text.class);
+		xstream.processAnnotations(Image.class);
+		xstream.processAnnotations(Ninepatch.class);
+		xstream.processAnnotations(Content.class);
+		// Batocera
 		xstream.processAnnotations(BatoceraTheme.class);
 		xstream.processAnnotations(BatoceraCarousel.class);
 		xstream.processAnnotations(CarouselFeature.class);
 		xstream.processAnnotations(VideoFeature.class);
+	}
 
-		xstream.alias("feature", CarouselFeature.class);
-		xstream.alias("feature", VideoFeature.class);
-		
+	@Override
+	public void addConverter(XStream xstream) {
+		FeatureXStreamConverter featureXmlConverter = new FeatureXStreamConverter(featureConverter);
 		xstream.registerConverter(featureXmlConverter);
-		
-		xstream.allowTypes(new Class[] {
-				BatoceraTheme.class,
-				BatoceraCarousel.class,
-				BatoceraFeature.class,
-				CarouselFeature.class,
-				VideoFeature.class });
-		
-		return xstream;
-		
+	}
+
+	@Override
+	public void defineAlias(XStream xstream) {
+		xstream.alias("feature", CarouselFeature.class);
+		xstream.alias("feature", VideoFeature.class);		
 	}
 
 }

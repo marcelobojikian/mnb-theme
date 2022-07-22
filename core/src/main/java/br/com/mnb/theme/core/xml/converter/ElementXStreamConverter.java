@@ -13,10 +13,6 @@ public class ElementXStreamConverter implements Converter {
 	
 	private TagConverter<AbstractElement, String> converter;
 
-//	public ElementXStreamConverter(ElementFactory factory) {
-//		this(new ElementConverter(factory));
-//	}
-
 	public ElementXStreamConverter(TagConverter<AbstractElement, String> converter) {
 		this.converter = converter;
 	}

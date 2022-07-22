@@ -6,31 +6,36 @@ import java.util.Map.Entry;
 
 import br.com.mnb.theme.core.factory.ExtensionFactory;
 
-public class SimpleConverter<T> implements TagConverter<T, String>{
+public class NamedTagConverter<T> implements TagConverter<T, String>{
 	
 	private ExtensionFactory<T> factory;
-	private Map<Class<? extends T>, String> registers;
+	private Map<Class<? extends T>, String> tags;
 	
-	public SimpleConverter(ExtensionFactory<T> factory) {
+//	public SimpleConverter() {
+//		this.factory = new SimpleFactory<T>();
+//		this.registers = new HashMap<>();
+//	}
+	
+	public NamedTagConverter(ExtensionFactory<T> factory) {
 		this.factory = factory;
-		this.registers = new HashMap<>();
+		this.tags = new HashMap<>();
 	}
 	
-	public void registerElement(String tagName, Class<? extends T> clazz) {
-		registers.put(clazz, tagName);
+	public void put(String tagName, Class<? extends T> clazz) {
+		tags.put(clazz, tagName);
 	}
 
 	@Override
 	public String toString(T element) {
-		if (registers.containsKey(element.getClass())) {
-			return registers.get(element.getClass());
+		if (tags.containsKey(element.getClass())) {
+			return tags.get(element.getClass());
 		}
 		throw new IllegalArgumentException("Unmapped element " + element);
 	}
 
 	@Override
 	public T toComponent(String tagName) {
-		for (Entry<Class<? extends T>, String> entry : registers.entrySet()) {
+		for (Entry<Class<? extends T>, String> entry : tags.entrySet()) {
 			if (tagName.equals(entry.getValue())) {
 				return factory.create(entry.getKey());
 			}

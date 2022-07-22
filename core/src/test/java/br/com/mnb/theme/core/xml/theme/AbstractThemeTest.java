@@ -22,7 +22,7 @@ import br.com.mnb.theme.core.model.View;
 import br.com.mnb.theme.core.xml.Content;
 import br.com.mnb.theme.core.xml.converter.ContentXStreamConverter;
 import br.com.mnb.theme.core.xml.converter.ElementXStreamConverter;
-import br.com.mnb.theme.core.xml.converter.SimpleConverter;
+import br.com.mnb.theme.core.xml.converter.NamedTagConverter;
 import br.com.mnb.theme.core.xml.element.AbstractElement;
 import br.com.mnb.theme.core.xml.view.ViewElement;
 
@@ -34,9 +34,9 @@ class AbstractThemeTest {
 	public void setup() {
 
 		SimpleFactory<AbstractElement> factory = new SimpleFactory<AbstractElement>();
-		SimpleConverter<AbstractElement> converter = new SimpleConverter<AbstractElement>(factory);
-		converter.registerElement("element", Element.class);
-		converter.registerElement("second", SecondElement.class);
+		NamedTagConverter<AbstractElement> converter = new NamedTagConverter<AbstractElement>(factory);
+		converter.put("element", Element.class);
+		converter.put("second", SecondElement.class);
 		
 		ElementXStreamConverter xmlConverter = new ElementXStreamConverter(converter);
 

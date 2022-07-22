@@ -13,11 +13,11 @@ import org.junit.jupiter.api.Test;
 import br.com.mnb.theme.core.factory.SimpleFactory;
 import br.com.mnb.theme.core.model.Element;
 import br.com.mnb.theme.core.model.SecondElement;
-import br.com.mnb.theme.core.xml.converter.SimpleConverter;
+import br.com.mnb.theme.core.xml.converter.NamedTagConverter;
 
 class ElementConverterTest {
 
-	SimpleConverter<AbstractElement> converter;
+	NamedTagConverter<AbstractElement> converter;
 	
 	@BeforeEach
 	public void setup() {
@@ -27,9 +27,9 @@ class ElementConverterTest {
 		when(factory.create(Element.class)).thenReturn(new Element());
 		when(factory.create(SecondElement.class)).thenReturn(new SecondElement());
 		
-		converter = new SimpleConverter<AbstractElement>(factory);
-		converter.registerElement("element", Element.class);
-		converter.registerElement("second", SecondElement.class);
+		converter = new NamedTagConverter<AbstractElement>(factory);
+		converter.put("element", Element.class);
+		converter.put("second", SecondElement.class);
 	}
 
 	@Test

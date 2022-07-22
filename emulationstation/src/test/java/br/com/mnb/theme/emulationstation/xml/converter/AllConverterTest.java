@@ -9,7 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import br.com.mnb.theme.core.factory.SimpleFactory;
-import br.com.mnb.theme.core.xml.converter.SimpleConverter;
+import br.com.mnb.theme.core.xml.converter.NamedTagConverter;
 import br.com.mnb.theme.core.xml.element.AbstractElement;
 import br.com.mnb.theme.core.xml.view.AbstractViewElement;
 import br.com.mnb.theme.emulationstation.xml.element.Datetime;
@@ -25,25 +25,25 @@ import br.com.mnb.theme.emulationstation.xml.view.View;
 
 public class AllConverterTest {
 	
-	private SimpleConverter<AbstractElement> elementConverter;
-	private SimpleConverter<AbstractViewElement> viewConverter;
+	private NamedTagConverter<AbstractElement> elementConverter;
+	private NamedTagConverter<AbstractViewElement> viewConverter;
 	
 	@BeforeEach
 	public void setup() {
 		
-		elementConverter = new SimpleConverter<AbstractElement>(new SimpleFactory<AbstractElement>());
-		elementConverter.registerElement("text", Text.class);
-		elementConverter.registerElement("image", Image.class);
-		elementConverter.registerElement("datetime", Datetime.class);
-		elementConverter.registerElement("helpsystem", HelpSystem.class);
-		elementConverter.registerElement("ninepatch", Ninepatch.class);
-		elementConverter.registerElement("rating", Rating.class);
-		elementConverter.registerElement("sound", Sound.class);
-		elementConverter.registerElement("textlist", TextList.class);
-		elementConverter.registerElement("video", Video.class);
+		elementConverter = new NamedTagConverter<AbstractElement>(new SimpleFactory<AbstractElement>());
+		elementConverter.put("text", Text.class);
+		elementConverter.put("image", Image.class);
+		elementConverter.put("datetime", Datetime.class);
+		elementConverter.put("helpsystem", HelpSystem.class);
+		elementConverter.put("ninepatch", Ninepatch.class);
+		elementConverter.put("rating", Rating.class);
+		elementConverter.put("sound", Sound.class);
+		elementConverter.put("textlist", TextList.class);
+		elementConverter.put("video", Video.class);
 		
-		viewConverter = new SimpleConverter<AbstractViewElement>(new SimpleFactory<AbstractViewElement>());
-		viewConverter.registerElement("view", View.class);
+		viewConverter = new NamedTagConverter<AbstractViewElement>(new SimpleFactory<AbstractViewElement>());
+		viewConverter.put("view", View.class);
 		
 	}
 

@@ -12,11 +12,11 @@ import org.junit.jupiter.api.Test;
 
 import br.com.mnb.theme.core.factory.SimpleFactory;
 import br.com.mnb.theme.core.model.Theme;
-import br.com.mnb.theme.core.xml.converter.SimpleConverter;
+import br.com.mnb.theme.core.xml.converter.NamedTagConverter;
 
 class ThemeConverterTest {
 	
-	SimpleConverter<AbstractTheme> converter;
+	NamedTagConverter<AbstractTheme> converter;
 	
 	@BeforeEach
 	public void setup() {
@@ -25,8 +25,8 @@ class ThemeConverterTest {
 		SimpleFactory<AbstractTheme> factory = mock(SimpleFactory.class);
 		when(factory.create(Theme.class)).thenReturn(new Theme());
 		
-		converter = new SimpleConverter<AbstractTheme>(factory);
-		converter.registerElement("theme", Theme.class);
+		converter = new NamedTagConverter<AbstractTheme>(factory);
+		converter.put("theme", Theme.class);
 	}
 
 	@Test

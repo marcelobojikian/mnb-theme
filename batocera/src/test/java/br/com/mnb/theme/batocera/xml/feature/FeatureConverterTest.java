@@ -11,11 +11,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import br.com.mnb.theme.core.factory.SimpleFactory;
-import br.com.mnb.theme.core.xml.converter.SimpleConverter;
+import br.com.mnb.theme.core.xml.converter.NamedTagConverter;
 
 class FeatureConverterTest {
 
-	SimpleConverter<AbstractFeature> converter;
+	NamedTagConverter<AbstractFeature> converter;
 	
 	@BeforeEach
 	public void setup() {
@@ -25,9 +25,9 @@ class FeatureConverterTest {
 		when(factory.create(CarouselFeature.class)).thenReturn(new CarouselFeature());
 		when(factory.create(VideoFeature.class)).thenReturn(new VideoFeature());
 		
-		converter = new SimpleConverter<AbstractFeature>(factory);
-		converter.registerElement("carousel", CarouselFeature.class);
-		converter.registerElement("video", VideoFeature.class);
+		converter = new NamedTagConverter<AbstractFeature>(factory);
+		converter.put("carousel", CarouselFeature.class);
+		converter.put("video", VideoFeature.class);
 	}
 
 	@Test

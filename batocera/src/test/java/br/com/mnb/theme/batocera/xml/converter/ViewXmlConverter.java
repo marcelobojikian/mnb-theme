@@ -1,7 +1,6 @@
 package br.com.mnb.theme.batocera.xml.converter;
 
 import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.security.NoTypePermission;
 
 import br.com.mnb.theme.batocera.xml.element.BatoceraCarousel;
 import br.com.mnb.theme.batocera.xml.element.Datetime;
@@ -17,65 +16,36 @@ import br.com.mnb.theme.batocera.xml.view.View;
 import br.com.mnb.theme.core.factory.ExtensionFactory;
 import br.com.mnb.theme.core.factory.SimpleFactory;
 import br.com.mnb.theme.core.xml.Content;
-import br.com.mnb.theme.core.xml.converter.ContentXStreamConverter;
-import br.com.mnb.theme.core.xml.converter.ElementXStreamConverter;
-import br.com.mnb.theme.core.xml.converter.SimpleConverter;
+import br.com.mnb.theme.core.xml.converter.NamedTagConverter;
+import br.com.mnb.theme.core.xml.converter.XStreamConfigure;
 import br.com.mnb.theme.core.xml.converter.XmlConverter;
 import br.com.mnb.theme.core.xml.element.AbstractElement;
 
-public class ViewXmlConverter extends XmlConverter<View> {
+public class ViewXmlConverter implements XStreamConfigure {
 	
-	ElementXStreamConverter xmlConverter;
+	private XmlConverter converter;
 	
 	public ViewXmlConverter() {
 		this(new SimpleFactory<AbstractElement>());
 	}
 	
-	public ViewXmlConverter(ExtensionFactory<AbstractElement> factory) {	
-		xmlConverter = getElementXmlConverter(factory);
+	public ViewXmlConverter(ExtensionFactory<AbstractElement> factory) {
+		converter = new XmlConverter(this);
+		converter.setElementConverter(new NamedTagConverter<AbstractElement>(factory));
+		converter.putTag("text", Text.class);
+		converter.putTag("image", Image.class);
+		converter.putTag("datetime", Datetime.class);
+		converter.putTag("helpsystem", HelpSystem.class);
+		converter.putTag("ninepatch", Ninepatch.class);
+		converter.putTag("rating", Rating.class);
+		converter.putTag("sound", Sound.class);
+		converter.putTag("textlist", TextList.class);
+		converter.putTag("video", Video.class);
+		converter.putTag("carousel", BatoceraCarousel.class);
 	}
-
-	public ElementXStreamConverter getElementXmlConverter(ExtensionFactory<AbstractElement> factory) {
-		SimpleConverter<AbstractElement> converter = new SimpleConverter<AbstractElement>(factory);
-		converter.registerElement("text", Text.class);
-		converter.registerElement("image", Image.class);
-		converter.registerElement("datetime", Datetime.class);
-		converter.registerElement("helpsystem", HelpSystem.class);
-		converter.registerElement("ninepatch", Ninepatch.class);
-		converter.registerElement("rating", Rating.class);
-		converter.registerElement("sound", Sound.class);
-		converter.registerElement("textlist", TextList.class);
-		converter.registerElement("video", Video.class);
-		converter.registerElement("carousel", BatoceraCarousel.class);
-		return new ElementXStreamConverter(converter);
-	}
-
+	
 	@Override
-	public XStream getXStream() {
-
-		XStream  xstream = new XStream();
-
-		xstream.autodetectAnnotations(true);
-		xstream.ignoreUnknownElements();
-
-		xstream.registerConverter(new ContentXStreamConverter());
-		xstream.registerConverter(xmlConverter);
-
-		xstream.processAnnotations(BatoceraCarousel.class);
-		xstream.processAnnotations(Rating.class);
-		xstream.processAnnotations(Datetime.class);
-		xstream.processAnnotations(HelpSystem.class);
-		xstream.processAnnotations(TextList.class);
-		xstream.processAnnotations(Video.class);
-		xstream.processAnnotations(Sound.class);
-		xstream.processAnnotations(View.class);
-		xstream.processAnnotations(Text.class);
-		xstream.processAnnotations(Image.class);
-		xstream.processAnnotations(Ninepatch.class);
-		xstream.processAnnotations(Content.class);
-		
-		xstream.addPermission(NoTypePermission.NONE);
-		
+	public void defineAllowTypes(XStream xstream) {
 		xstream.allowTypes(new Class[] {
 				BatoceraCarousel.class,
 				Rating.class,
@@ -89,9 +59,30 @@ public class ViewXmlConverter extends XmlConverter<View> {
 				Image.class,
 				Ninepatch.class,
 				Content.class });
-		
-		return xstream;
+	}
+	
+	@Override
+	public void defineProcessAnnotations(XStream xstream) {
+		xstream.processAnnotations(BatoceraCarousel.class);
+		xstream.processAnnotations(Rating.class);
+		xstream.processAnnotations(Datetime.class);
+		xstream.processAnnotations(HelpSystem.class);
+		xstream.processAnnotations(TextList.class);
+		xstream.processAnnotations(Video.class);
+		xstream.processAnnotations(Sound.class);
+		xstream.processAnnotations(View.class);
+		xstream.processAnnotations(Text.class);
+		xstream.processAnnotations(Image.class);
+		xstream.processAnnotations(Ninepatch.class);
+		xstream.processAnnotations(Content.class);
+	}
 
+	public String toXML(Object object) {
+		return converter.toXML(object);
+	}
+
+	public View fromXML(String result) {
+		return (View) converter.fromXML(result);
 	}
 
 }

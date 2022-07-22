@@ -15,7 +15,7 @@ import br.com.mnb.theme.core.xml.converter.ElementXmlConverter;
 
 class AbstractElementTest {
 
-	ElementXmlConverter xstream = new ElementXmlConverter();
+	ElementXmlConverter converter = new ElementXmlConverter();
 
 	@Test
 	public void whenCreateElement_DefaultValues() {
@@ -34,7 +34,7 @@ class AbstractElementTest {
 		Element element = new Element();
 
 		assertThrows(NullPointerException.class, () -> {
-			xstream.toXML(element);
+			converter.toXML(element);
 		});
 		
 	}
@@ -45,7 +45,7 @@ class AbstractElementTest {
 		Element element = new Element();
 		element.setName("TextElement");
 		
-		String contentXml = xstream.toXML(element);
+		String contentXml = converter.toXML(element);
 		String result = "<element name=\"TextElement\"/>";
 
 		assertEquals(contentXml, result);
@@ -68,7 +68,7 @@ class AbstractElementTest {
 		element.setExtra(attributeExtra);
 		element.setContent(new Content());
 
-		String elementXml = xstream.toXML(element);
+		String elementXml = converter.toXML(element);
 		
 		StringBuilder result = new StringBuilder("<"+tagName);
 		if(attributeExtra) {
@@ -88,7 +88,7 @@ class AbstractElementTest {
 		}
 		result.append(" name=\""+attributeName+"\"/>");
 
-		CommonElement elementObj = (CommonElement) xstream.fromXML(result.toString());
+		CommonElement elementObj = converter.fromXML(result.toString());
 
 		assertNotNull(elementObj);
 		assertInstanceOf(clazz, elementObj);

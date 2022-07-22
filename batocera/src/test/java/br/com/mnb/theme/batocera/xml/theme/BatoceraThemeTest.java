@@ -12,7 +12,7 @@ import br.com.mnb.theme.batocera.xml.view.View;
 
 class BatoceraThemeTest {
 
-	BatoceraXmlConverter xstream = new BatoceraXmlConverter();
+	BatoceraXmlConverter converter = new BatoceraXmlConverter();
 
 	@Test
 	public void sucessWhenCreateXml_ThemeWithOneView() {
@@ -24,7 +24,7 @@ class BatoceraThemeTest {
 
 		theme.addViews(view);
 
-		String contentXml = xstream.toXML(theme);
+		String contentXml = converter.toXML(theme);
 		// @formatter:off
 		String result = "<theme>\n"
 					  + "  <view name=\"ViewElement\"/>\n"
@@ -48,7 +48,7 @@ class BatoceraThemeTest {
 
 		theme.addViews(view, viewSecond);
 
-		String contentXml = xstream.toXML(theme);
+		String contentXml = converter.toXML(theme);
 		// @formatter:off
 		String result = "<theme>\n"
 					  + "  <view name=\"ViewElement\"/>\n"
@@ -69,7 +69,7 @@ class BatoceraThemeTest {
 
 		theme.addFeatures(feature);
 
-		String contentXml = xstream.toXML(theme);
+		String contentXml = converter.toXML(theme);
 		// @formatter:off
 		String result = "<theme>\n"
 					  + "  <feature class=\"feature\" supported=\"carousel\"/>\n"
@@ -90,7 +90,7 @@ class BatoceraThemeTest {
 
 		theme.addFeatures(feature, featureSecond);
 
-		String contentXml = xstream.toXML(theme);
+		String contentXml = converter.toXML(theme);
 		// @formatter:off
 		String result = "<theme>\n"
 					  + "  <feature class=\"feature\" supported=\"carousel\"/>\n"

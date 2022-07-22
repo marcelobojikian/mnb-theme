@@ -1,6 +1,9 @@
 package br.com.mnb.theme.core.xml.converter;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -12,9 +15,9 @@ import br.com.mnb.theme.core.model.Element;
 import br.com.mnb.theme.core.model.SecondElement;
 import br.com.mnb.theme.core.xml.element.AbstractElement;
 
-class SimpleConverterTest {
+class NamedTagConverterTest {
 
-	SimpleConverter<AbstractElement> converter;
+	NamedTagConverter<AbstractElement> converter;
 	
 	@BeforeEach
 	public void setup() {
@@ -24,9 +27,9 @@ class SimpleConverterTest {
 		when(factory.create(Element.class)).thenReturn(new Element());
 		when(factory.create(SecondElement.class)).thenReturn(new SecondElement());
 		
-		converter = new SimpleConverter<AbstractElement>(factory);
-		converter.registerElement("element", Element.class);
-		converter.registerElement("second", SecondElement.class);
+		converter = new NamedTagConverter<AbstractElement>(factory);
+		converter.put("element", Element.class);
+		converter.put("second", SecondElement.class);
 	}
 
 	@Test

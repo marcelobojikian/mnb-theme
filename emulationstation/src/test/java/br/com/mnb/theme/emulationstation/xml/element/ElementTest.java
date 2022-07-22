@@ -169,7 +169,7 @@ public class ElementTest {
 		}
 		result.append(" name=\""+attributeName+"\"/>");
 
-		CommonElement elementObj = (CommonElement) xstream.fromXML(result.toString());
+		CommonElement elementObj = xstream.fromXML(result.toString());
 
 		assertNotNull(elementObj);
 		assertInstanceOf(clazz, elementObj);

@@ -12,11 +12,11 @@ import org.junit.jupiter.api.Test;
 
 import br.com.mnb.theme.core.factory.SimpleFactory;
 import br.com.mnb.theme.core.model.View;
-import br.com.mnb.theme.core.xml.converter.SimpleConverter;
+import br.com.mnb.theme.core.xml.converter.NamedTagConverter;
 
 class ViewConverterTest {
 	
-	SimpleConverter<AbstractViewElement> converter;
+	NamedTagConverter<AbstractViewElement> converter;
 	
 	@BeforeEach
 	public void setup() {
@@ -25,8 +25,8 @@ class ViewConverterTest {
 		SimpleFactory<AbstractViewElement> factory = mock(SimpleFactory.class);
 		when(factory.create(View.class)).thenReturn(new View());
 		
-		converter = new SimpleConverter<AbstractViewElement>(factory);
-		converter.registerElement("view", View.class);
+		converter = new NamedTagConverter<AbstractViewElement>(factory);
+		converter.put("view", View.class);
 	}
 
 	@Test

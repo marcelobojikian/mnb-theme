@@ -17,7 +17,7 @@ import br.com.mnb.theme.core.xml.element.CommonElement;
 
 class AbstractViewElementTest {
 
-	ViewXmlConverter xstream = new ViewXmlConverter();
+	ViewXmlConverter converter = new ViewXmlConverter();
 
 	@Test
 	public void whenCreateView_DefaultValues() {
@@ -35,7 +35,7 @@ class AbstractViewElementTest {
 		View view = new View();
 		view.setName("View");
 
-		String contentXml = xstream.toXML(view);
+		String contentXml = converter.toXML(view);
 		String result = "<view name=\"View\"/>";
 
 		assertEquals(contentXml, result);
@@ -53,7 +53,7 @@ class AbstractViewElementTest {
 
 		view.getElements().add(element);
 
-		String viewXml = xstream.toXML(view);
+		String viewXml = converter.toXML(view);
 		// @formatter:off
 		String result = "<view name=\"ViewElement\">\n"
 					  + "  <element name=\"TextElement\"/>\n"
@@ -78,7 +78,7 @@ class AbstractViewElementTest {
 
 		view.setElements(Arrays.asList(firstElement, secondElement));
 
-		String viewXml = xstream.toXML(view);
+		String viewXml = converter.toXML(view);
 		// @formatter:off
 		String result = "<view name=\"ViewElement\">\n"
 					  + "  <element name=\"TextElement\"/>\n"
@@ -102,7 +102,7 @@ class AbstractViewElementTest {
 
 		view.getElements().add(element);
 
-		String viewXml = xstream.toXML(view);
+		String viewXml = converter.toXML(view);
 		// @formatter:off
 		String result = "<view name=\"ViewElement\">\n"
 					  + "  <element extra=\"true\" name=\"TextElement\"/>\n"
@@ -123,7 +123,7 @@ class AbstractViewElementTest {
 				  	  + "</view>";
 		// @formatter:on
 
-		View viewObj = xstream.fromXML(result);
+		View viewObj = (View) converter.fromXML(result);
 
 		assertNotNull(viewObj);
 		assertEquals(viewObj.getName(), "ViewElement");

@@ -16,7 +16,7 @@ import br.com.mnb.theme.core.xml.element.CommonElement;
 
 class BatoceraCarouselTest {
 
-	ElementXmlConverter xstream = new ElementXmlConverter();
+	ElementXmlConverter converter = new ElementXmlConverter();
 
 	@Test
 	public void whenCreateElement_DefaultValues() {
@@ -35,7 +35,7 @@ class BatoceraCarouselTest {
 		Text text = new Text();
 
 		assertThrows(NullPointerException.class, () -> {
-			xstream.toXML(text);
+			converter.toXML(text);
 		});
 		
 	}
@@ -46,7 +46,7 @@ class BatoceraCarouselTest {
 		Text text = new Text();
 		text.setName("TextElement");
 		
-		String contentXml = xstream.toXML(text);
+		String contentXml = converter.toXML(text);
 		String result = "<text name=\"TextElement\"/>";
 
 		assertEquals(contentXml, result);
@@ -159,7 +159,7 @@ class BatoceraCarouselTest {
 		element.setExtra(attributeExtra);
 		element.setContent(new Content());
 
-		String elementXml = xstream.toXML(element);
+		String elementXml = converter.toXML(element);
 		
 		StringBuilder result = new StringBuilder("<"+tagName);
 		if(attributeExtra) {
@@ -179,7 +179,7 @@ class BatoceraCarouselTest {
 		}
 		result.append(" name=\""+attributeName+"\"/>");
 
-		CommonElement elementObj = (CommonElement) xstream.fromXML(result.toString());
+		CommonElement elementObj = converter.fromXML(result.toString());
 
 		assertNotNull(elementObj);
 		assertInstanceOf(clazz, elementObj);

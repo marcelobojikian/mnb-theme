@@ -9,7 +9,7 @@ import br.com.mnb.theme.emulationstation.xml.view.View;
 
 class EmulationStationThemeTest {
 
-	ThemeXmlConverter xstream = new ThemeXmlConverter();
+	ThemeXmlConverter converter = new ThemeXmlConverter();
 
 	@Test
 	public void sucessWhenCreateXml_ThemeWithOneView() {
@@ -21,7 +21,7 @@ class EmulationStationThemeTest {
 
 		theme.addViews(view);
 
-		String contentXml = xstream.toXML(theme);
+		String contentXml = converter.toXML(theme);
 		// @formatter:off
 		String result = "<theme>\n"
 					  + "  <view name=\"ViewElement\"/>\n"
@@ -45,7 +45,7 @@ class EmulationStationThemeTest {
 
 		theme.addViews(view, viewSecond);
 
-		String contentXml = xstream.toXML(theme);
+		String contentXml = converter.toXML(theme);
 		// @formatter:off
 		String result = "<theme>\n"
 					  + "  <view name=\"ViewElement\"/>\n"
