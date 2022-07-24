@@ -7,16 +7,32 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import br.com.mnb.theme.batocera.xml.converter.ElementXmlConverter;
 import br.com.mnb.theme.core.xml.Content;
+import br.com.mnb.theme.core.xml.converter.TagElementConverter;
 import br.com.mnb.theme.core.xml.element.AbstractElement;
 import br.com.mnb.theme.core.xml.element.CommonElement;
 
 class BatoceraCarouselTest {
 
-	ElementXmlConverter converter = new ElementXmlConverter();
+	TagElementConverter converter;
+	
+	@BeforeEach
+	public void setup() {
+		converter = new TagElementConverter();
+		converter.add("text", Text.class);
+		converter.add("image", Image.class);
+		converter.add("datetime", Datetime.class);
+		converter.add("helpsystem", HelpSystem.class);
+		converter.add("ninepatch", Ninepatch.class);
+		converter.add("rating", Rating.class);
+		converter.add("sound", Sound.class);
+		converter.add("textlist", TextList.class);
+		converter.add("video", Video.class);
+		converter.add("carousel", BatoceraCarousel.class);
+	}
 
 	@Test
 	public void whenCreateElement_DefaultValues() {

@@ -12,29 +12,18 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.security.NoTypePermission;
 
-import br.com.mnb.theme.core.xml.converter.ContentXStreamConverter;
+import br.com.mnb.theme.core.xml.xstream.XStreamConfigure;
+import br.com.mnb.theme.core.xml.xstream.configure.TagContentConfigure;
 
 public class ContentTest {
 	
+	final XStreamConfigure configure = new TagContentConfigure();
 	XStream xstream;
 	
 	@BeforeEach
 	public void setup() {
-
-		xstream = new XStream();
-
-		xstream.autodetectAnnotations(true);
-		xstream.ignoreUnknownElements();
-
-		xstream.addPermission(NoTypePermission.NONE);
-
-		xstream.registerConverter(new ContentXStreamConverter());
-		xstream.allowTypes(new Class[] { Content.class });
-		
-		xstream.alias("element", Content.class);
-		
+		xstream = configure.getXStream();
 	}
 
 	@Test

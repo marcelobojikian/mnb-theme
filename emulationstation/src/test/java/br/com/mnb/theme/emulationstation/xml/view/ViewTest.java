@@ -6,16 +6,40 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import br.com.mnb.theme.core.xml.converter.TagViewConverter;
 import br.com.mnb.theme.core.xml.element.CommonElement;
-import br.com.mnb.theme.emulationstation.xml.converter.ViewXmlConverter;
+import br.com.mnb.theme.core.xml.view.ViewElement;
+import br.com.mnb.theme.emulationstation.xml.element.Datetime;
+import br.com.mnb.theme.emulationstation.xml.element.HelpSystem;
 import br.com.mnb.theme.emulationstation.xml.element.Image;
+import br.com.mnb.theme.emulationstation.xml.element.Ninepatch;
+import br.com.mnb.theme.emulationstation.xml.element.Rating;
+import br.com.mnb.theme.emulationstation.xml.element.Sound;
 import br.com.mnb.theme.emulationstation.xml.element.Text;
+import br.com.mnb.theme.emulationstation.xml.element.TextList;
+import br.com.mnb.theme.emulationstation.xml.element.Video;
 
 class ViewTest {
 
-	ViewXmlConverter xstream = new ViewXmlConverter();
+	TagViewConverter converter;
+	
+	@BeforeEach
+	public void setup() {
+		converter = new TagViewConverter();
+		converter.addView("view", View.class);
+		converter.addElement("text", Text.class);
+		converter.addElement("image", Image.class);
+		converter.addElement("datetime", Datetime.class);
+		converter.addElement("helpsystem", HelpSystem.class);
+		converter.addElement("ninepatch", Ninepatch.class);
+		converter.addElement("rating", Rating.class);
+		converter.addElement("sound", Sound.class);
+		converter.addElement("textlist", TextList.class);
+		converter.addElement("video", Video.class);
+	}
 
 	@Test
 	public void whenCreateView_DefaultValues() {
@@ -33,7 +57,7 @@ class ViewTest {
 		View view = new View();
 		view.setName("View");
 
-		String contentXml = xstream.toXML(view);
+		String contentXml = converter.toXML(view);
 		String result = "<view name=\"View\"/>";
 
 		assertEquals(contentXml, result);
@@ -51,7 +75,7 @@ class ViewTest {
 
 		view.addElement(text);
 
-		String viewXml = xstream.toXML(view);
+		String viewXml = converter.toXML(view);
 		// @formatter:off
 		String result = "<view name=\"ViewElement\">\n"
 					  + "  <text name=\"TextElement\"/>\n"
@@ -76,7 +100,7 @@ class ViewTest {
 
 		view.addElements(text, image);
 
-		String viewXml = xstream.toXML(view);
+		String viewXml = converter.toXML(view);
 		// @formatter:off
 		String result = "<view name=\"ViewElement\">\n"
 					  + "  <text name=\"TextElement\"/>\n"
@@ -100,7 +124,7 @@ class ViewTest {
 
 		view.addElement(text);
 
-		String viewXml = xstream.toXML(view);
+		String viewXml = converter.toXML(view);
 		// @formatter:off
 		String result = "<view name=\"ViewElement\">\n"
 					  + "  <text extra=\"true\" name=\"TextElement\"/>\n"
@@ -121,7 +145,7 @@ class ViewTest {
 				  	  + "</view>";
 		// @formatter:on
 
-		View viewObj = xstream.fromXML(result);
+		ViewElement viewObj = converter.fromXML(result);
 
 		assertNotNull(viewObj);
 		assertEquals(viewObj.getName(), "ViewElement");
@@ -134,4 +158,16 @@ class ViewTest {
 
 	}
 
+//	@Test
+//	void failWhenConvertViewToTagNameWithComponentUnmapped() {
+//		assertThrows(IllegalArgumentException.class, () -> {
+//			converter.toXML(new UnmappedView());
+//		});
+//	}
+
 }
+
+//@XStreamAlias("unmapped")
+//class UnmappedView extends AbstractViewElement { 
+//	private static final long serialVersionUID = 1L;
+//}

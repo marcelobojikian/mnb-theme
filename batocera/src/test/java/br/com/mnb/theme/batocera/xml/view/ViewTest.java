@@ -6,16 +6,41 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import br.com.mnb.theme.batocera.xml.converter.ViewXmlConverter;
+import br.com.mnb.theme.batocera.xml.element.BatoceraCarousel;
+import br.com.mnb.theme.batocera.xml.element.Datetime;
+import br.com.mnb.theme.batocera.xml.element.HelpSystem;
 import br.com.mnb.theme.batocera.xml.element.Image;
+import br.com.mnb.theme.batocera.xml.element.Ninepatch;
+import br.com.mnb.theme.batocera.xml.element.Rating;
+import br.com.mnb.theme.batocera.xml.element.Sound;
 import br.com.mnb.theme.batocera.xml.element.Text;
+import br.com.mnb.theme.batocera.xml.element.TextList;
+import br.com.mnb.theme.batocera.xml.element.Video;
+import br.com.mnb.theme.core.xml.converter.TagViewConverter;
 import br.com.mnb.theme.core.xml.element.CommonElement;
 
 class ViewTest {
 
-	ViewXmlConverter converter = new ViewXmlConverter();
+	TagViewConverter converter;
+	
+	@BeforeEach
+	public void setup() {
+		converter = new TagViewConverter();
+		converter.addView("view", View.class);
+		converter.addElement("text", Text.class);
+		converter.addElement("image", Image.class);
+		converter.addElement("datetime", Datetime.class);
+		converter.addElement("helpsystem", HelpSystem.class);
+		converter.addElement("ninepatch", Ninepatch.class);
+		converter.addElement("rating", Rating.class);
+		converter.addElement("sound", Sound.class);
+		converter.addElement("textlist", TextList.class);
+		converter.addElement("video", Video.class);
+		converter.addElement("carousel", BatoceraCarousel.class);
+	}
 
 	@Test
 	public void whenCreateView_DefaultValues() {

@@ -3,6 +3,7 @@ package br.com.mnb.theme.batocera.xml.feature;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 
+@XStreamAlias("feature")
 public class CarouselFeature extends AbstractFeature {
 
 	private static final long serialVersionUID = 1L;

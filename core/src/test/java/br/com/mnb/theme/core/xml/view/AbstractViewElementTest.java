@@ -8,16 +8,26 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import br.com.mnb.theme.core.model.Element;
+import br.com.mnb.theme.core.model.SecondElement;
 import br.com.mnb.theme.core.model.View;
-import br.com.mnb.theme.core.xml.converter.ViewXmlConverter;
+import br.com.mnb.theme.core.xml.converter.TagViewConverter;
 import br.com.mnb.theme.core.xml.element.CommonElement;
 
 class AbstractViewElementTest {
 
-	ViewXmlConverter converter = new ViewXmlConverter();
+	TagViewConverter converter;
+	
+	@BeforeEach
+	public void setup() {
+		converter = new TagViewConverter();
+		converter.addView("view", View.class);
+		converter.addElement("element", Element.class);
+		converter.addElement("second", SecondElement.class);
+	}
 
 	@Test
 	public void whenCreateView_DefaultValues() {

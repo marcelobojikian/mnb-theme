@@ -7,16 +7,31 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import br.com.mnb.theme.core.xml.Content;
+import br.com.mnb.theme.core.xml.converter.TagElementConverter;
 import br.com.mnb.theme.core.xml.element.AbstractElement;
 import br.com.mnb.theme.core.xml.element.CommonElement;
-import br.com.mnb.theme.emulationstation.xml.converter.ElementXmlConverter;
 
 public class ElementTest {
 
-	ElementXmlConverter xstream = new ElementXmlConverter();
+	TagElementConverter converter;
+	
+	@BeforeEach
+	public void setup() {
+		converter = new TagElementConverter();
+		converter.add("text", Text.class);
+		converter.add("image", Image.class);
+		converter.add("datetime", Datetime.class);
+		converter.add("helpsystem", HelpSystem.class);
+		converter.add("ninepatch", Ninepatch.class);
+		converter.add("rating", Rating.class);
+		converter.add("sound", Sound.class);
+		converter.add("textlist", TextList.class);
+		converter.add("video", Video.class);
+	}
 
 	@Test
 	public void whenCreateElement_DefaultValues() {
@@ -35,7 +50,7 @@ public class ElementTest {
 		Text text = new Text();
 
 		assertThrows(NullPointerException.class, () -> {
-			xstream.toXML(text);
+			converter.toXML(text);
 		});
 		
 	}
@@ -46,7 +61,7 @@ public class ElementTest {
 		Text text = new Text();
 		text.setName("TextElement");
 		
-		String contentXml = xstream.toXML(text);
+		String contentXml = converter.toXML(text);
 		String result = "<text name=\"TextElement\"/>";
 
 		assertEquals(contentXml, result);
@@ -149,7 +164,7 @@ public class ElementTest {
 		element.setExtra(attributeExtra);
 		element.setContent(new Content());
 
-		String elementXml = xstream.toXML(element);
+		String elementXml = converter.toXML(element);
 		
 		StringBuilder result = new StringBuilder("<"+tagName);
 		if(attributeExtra) {
@@ -169,7 +184,7 @@ public class ElementTest {
 		}
 		result.append(" name=\""+attributeName+"\"/>");
 
-		CommonElement elementObj = xstream.fromXML(result.toString());
+		CommonElement elementObj = converter.fromXML(result.toString());
 
 		assertNotNull(elementObj);
 		assertInstanceOf(clazz, elementObj);
@@ -178,4 +193,16 @@ public class ElementTest {
 		
 	}
 
+//	@Test
+//	void failWhenConvertElementToTagNameWithComponentUnmapped() {
+//		assertThrows(IllegalArgumentException.class, () -> {
+//			converter.toXML(new UnmappedElement());
+//		});
+//	}
+
 }
+
+//@XStreamAlias("unmapped")
+//class UnmappedElement extends AbstractElement { 
+//	private static final long serialVersionUID = 1L;
+//}

@@ -11,59 +11,24 @@ import java.util.Arrays;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.security.NoTypePermission;
-
-import br.com.mnb.theme.core.factory.SimpleFactory;
 import br.com.mnb.theme.core.model.Element;
 import br.com.mnb.theme.core.model.SecondElement;
 import br.com.mnb.theme.core.model.Theme;
 import br.com.mnb.theme.core.model.View;
-import br.com.mnb.theme.core.xml.Content;
-import br.com.mnb.theme.core.xml.converter.ContentXStreamConverter;
-import br.com.mnb.theme.core.xml.converter.ElementXStreamConverter;
-import br.com.mnb.theme.core.xml.converter.NamedTagConverter;
-import br.com.mnb.theme.core.xml.element.AbstractElement;
+import br.com.mnb.theme.core.xml.converter.TagThemeConverter;
 import br.com.mnb.theme.core.xml.view.ViewElement;
 
 class AbstractThemeTest {
-	
-	XStream xstream;
-	
+
+	TagThemeConverter converter;
+
 	@BeforeEach
 	public void setup() {
-
-		SimpleFactory<AbstractElement> factory = new SimpleFactory<AbstractElement>();
-		NamedTagConverter<AbstractElement> converter = new NamedTagConverter<AbstractElement>(factory);
-		converter.put("element", Element.class);
-		converter.put("second", SecondElement.class);
-		
-		ElementXStreamConverter xmlConverter = new ElementXStreamConverter(converter);
-
-		xstream = new XStream();
-
-		xstream.autodetectAnnotations(true);
-		xstream.ignoreUnknownElements();
-
-		xstream.registerConverter(new ContentXStreamConverter());
-		xstream.registerConverter(xmlConverter);
-
-		xstream.processAnnotations(View.class);
-		xstream.processAnnotations(Element.class);
-		xstream.processAnnotations(SecondElement.class);
-		xstream.processAnnotations(Content.class);
-		
-		xstream.addPermission(NoTypePermission.NONE);
-		
-		xstream.allowTypes(new Class[] {
-				View.class,
-				Element.class,
-				SecondElement.class,
-				Content.class });
-		
-		xstream.processAnnotations(Theme.class);
-		xstream.allowTypes(new Class[] { Theme.class });
-		
+		converter = new TagThemeConverter();
+		converter.setTheme(Theme.class);
+		converter.addView("view", View.class);
+		converter.addElement("element", Element.class);
+		converter.addElement("second", SecondElement.class);
 	}
 
 	@Test
@@ -82,7 +47,7 @@ class AbstractThemeTest {
 
 		Theme theme = new Theme();
 
-		String contentXml = xstream.toXML(theme);
+		String contentXml = converter.toXML(theme);
 		String result = "<theme/>";
 
 		assertEquals(contentXml, result);
@@ -95,7 +60,7 @@ class AbstractThemeTest {
 		Theme theme = new Theme();
 		theme.setFormatVersion(4);
 
-		String contentXml = xstream.toXML(theme);
+		String contentXml = converter.toXML(theme);
 		// @formatter:off
 		String result = "<theme>\n"
 					  + "  <formatVersion>4</formatVersion>\n"
@@ -116,7 +81,7 @@ class AbstractThemeTest {
 
 		theme.getViewElements().add(view);
 
-		String contentXml = xstream.toXML(theme);
+		String contentXml = converter.toXML(theme);
 		// @formatter:off
 		String result = "<theme>\n"
 					  + "  <view name=\"ViewElement\"/>\n"
@@ -140,7 +105,7 @@ class AbstractThemeTest {
 
 		theme.setViewElements(Arrays.asList(firstView, secondView));
 
-		String contentXml = xstream.toXML(theme);
+		String contentXml = converter.toXML(theme);
 		// @formatter:off
 		String result = "<theme>\n"
 					  + "  <view name=\"ViewElement\"/>\n"
@@ -159,7 +124,7 @@ class AbstractThemeTest {
 
 		theme.getIncludes().add("IncludeName");
 
-		String contentXml = xstream.toXML(theme);
+		String contentXml = converter.toXML(theme);
 		// @formatter:off
 		String result = "<theme>\n"
 					  + "  <include>IncludeName</include>\n"
@@ -177,7 +142,7 @@ class AbstractThemeTest {
 
 		theme.setIncludes(Arrays.asList("IncludeName", "SecondIncludeName"));
 
-		String contentXml = xstream.toXML(theme);
+		String contentXml = converter.toXML(theme);
 		// @formatter:off
 		String result = "<theme>\n"
 					  + "  <include>IncludeName</include>\n"
@@ -202,7 +167,7 @@ class AbstractThemeTest {
 					  + "</theme>";
 		// @formatter:on
 
-		ThemeElement themeObj = (ThemeElement) xstream.fromXML(result);
+		ThemeElement themeObj = (ThemeElement) converter.fromXML(result);
 
 		assertNotNull(themeObj);
 		assertEquals(themeObj.getFormatVersion(), 4);
@@ -216,6 +181,5 @@ class AbstractThemeTest {
 		assertEquals(viewTwo.getName(), "ViewTwo");
 
 	}
-
 
 }

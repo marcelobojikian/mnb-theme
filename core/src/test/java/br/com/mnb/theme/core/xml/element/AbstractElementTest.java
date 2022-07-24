@@ -7,15 +7,24 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import br.com.mnb.theme.core.model.Element;
+import br.com.mnb.theme.core.model.SecondElement;
 import br.com.mnb.theme.core.xml.Content;
-import br.com.mnb.theme.core.xml.converter.ElementXmlConverter;
+import br.com.mnb.theme.core.xml.converter.TagElementConverter;
 
 class AbstractElementTest {
 
-	ElementXmlConverter converter = new ElementXmlConverter();
+	TagElementConverter converter;
+	
+	@BeforeEach
+	public void setup() {
+		converter = new TagElementConverter();
+		converter.add("element", Element.class);
+		converter.add("second", SecondElement.class);
+	}
 
 	@Test
 	public void whenCreateElement_DefaultValues() {
