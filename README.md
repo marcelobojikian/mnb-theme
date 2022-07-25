@@ -44,7 +44,7 @@
 
 Initially made for mapping screens from XML structures to Java, it was developed by [Aloshi](https://github.com/Aloshi/EmulationStation) and used as reference for other systems such as [Batocera](https://github.com/batocera-linux/batocera-emulationstation), [EmuELEC](https://github.com/EmuELEC/emuelec-emulationstation), [RetroPie](https://github.com/RetroPie/EmulationStation) and [Recalbox](https://gitlab.com/recalbox/recalbox).
 
-Currently, only Batocera module has been developed, but the system is designed and made to be scalable, and in the future, differents XML can be coded and mapped for their respctive systems.
+Currently, only Batocera module has been developed, but the system is designed and made to be scalable, and in the future, differents XML can be coded and mapped for their respective systems.
 
 ## 🔖 Structure
 
@@ -74,6 +74,8 @@ Every project was divided by modules and separated by their function or system. 
 
 In each system contain a **pom.xml** file, the file used by Maven for managing dependencies, compiling projects, making automatized tests and other tasks.
 
+Ps. The module **reports** is the folder where all the modules will be agrupeted and tested for the SonarCube to analyze the coverage test.
+
 For more details, enter into their respective system folder and check their **README.md** file.
 
 ## 🤔 How to use
@@ -84,13 +86,13 @@ To use the system, make a clone for your machine.
   $ git clone git@github.com:marcelobojikian/mnb-theme.git
 ```
 
-Run your favority IDE of choice and use Maven for downloading the dependencies, managing the build and install all project on your machine, for example:
+Run your favorite IDE and use Maven to download the dependencies, build and install all the projects on your machine, for example:
 
 ```shell
   $ mvn install
 ```
 
-Once that's done, you can now collaborate with some codes :)
+Once that's done, you can collaborate with some codes :)
 
 ## :memo: License
 
