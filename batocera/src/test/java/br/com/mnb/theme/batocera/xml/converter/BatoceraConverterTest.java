@@ -6,11 +6,11 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import br.com.mnb.theme.batocera.xml.feature.AbstractFeature;
 import br.com.mnb.theme.batocera.xml.feature.CarouselFeature;
 import br.com.mnb.theme.batocera.xml.feature.VideoFeature;
 import br.com.mnb.theme.batocera.xml.theme.BatoceraTheme;
-import br.com.mnb.theme.batocera.xml.view.View;
+import br.com.mnb.theme.core.xml.feature.AbstractFeature;
+import br.com.mnb.theme.core.xml.view.View;
 
 class BatoceraConverterTest {
 

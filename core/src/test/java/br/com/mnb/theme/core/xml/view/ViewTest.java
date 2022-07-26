@@ -1,12 +1,6 @@
 package br.com.mnb.theme.core.xml.view;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertInstanceOf;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.util.Arrays;
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,7 +10,7 @@ import br.com.mnb.theme.core.model.SecondElement;
 import br.com.mnb.theme.core.xml.element.CommonElement;
 import br.com.mnb.theme.core.xml.tag.converter.TagViewConverter;
 
-class AbstractViewElementTest {
+class ViewTest {
 
 	TagViewConverter converter;
 	
@@ -60,7 +54,7 @@ class AbstractViewElementTest {
 		View view = new View();
 		view.setName("ViewElement");
 
-		view.getElements().add(element);
+		view.addElement(element);
 
 		String viewXml = converter.toXML(view);
 		// @formatter:off
@@ -76,22 +70,22 @@ class AbstractViewElementTest {
 	@Test
 	public void sucessWhenCreateXml_ViewWithManyElements() {
 
-		Element firstElement = new Element();
-		firstElement.setName("TextElement");
+		Element element = new Element();
+		element.setName("TextElement");
 
-		Element secondElement = new Element();
+		SecondElement secondElement = new SecondElement();
 		secondElement.setName("ImageElement");
 
 		View view = new View();
 		view.setName("ViewElement");
 
-		view.setElements(Arrays.asList(firstElement, secondElement));
+		view.addElements(element, secondElement);
 
 		String viewXml = converter.toXML(view);
 		// @formatter:off
 		String result = "<view name=\"ViewElement\">\n"
 					  + "  <element name=\"TextElement\"/>\n"
-					  + "  <element name=\"ImageElement\"/>\n"
+					  + "  <second name=\"ImageElement\"/>\n"
 					  + "</view>";
 		// @formatter:on
 
@@ -109,7 +103,7 @@ class AbstractViewElementTest {
 		View view = new View();
 		view.setName("ViewElement");
 
-		view.getElements().add(element);
+		view.addElement(element);
 
 		String viewXml = converter.toXML(view);
 		// @formatter:off
@@ -128,22 +122,34 @@ class AbstractViewElementTest {
 		// @formatter:off
 		String result = "<view name=\"ViewElement\">\n"
 				  	  + "  <element name=\"TextElement\"/>\n"
-				  	  + "  <element name=\"ImageElement\"/>\n"
+				  	  + "  <second name=\"ImageElement\"/>\n"
 				  	  + "</view>";
 		// @formatter:on
 
-		View viewObj = (View) converter.fromXML(result);
+		ViewElement viewObj = converter.fromXML(result);
 
 		assertNotNull(viewObj);
 		assertEquals(viewObj.getName(), "ViewElement");
 
-		CommonElement first = viewObj.getElements().get(0);
+		CommonElement element = viewObj.getElements().get(0);
 		CommonElement second = viewObj.getElements().get(1);
 
-		assertInstanceOf(Element.class, first);
-		assertInstanceOf(Element.class, second);
+		assertInstanceOf(Element.class, element);
+		assertInstanceOf(SecondElement.class, second);
 
 	}
 
+//	@Test
+//	void failWhenConvertViewToTagNameWithComponentUnmapped() {
+//		assertThrows(IllegalArgumentException.class, () -> {
+//			converter.toXML(new UnmappedView());
+//		});
+//	}
 
 }
+
+//@XStreamAlias("unmapped")
+//class UnmappedView extends AbstractViewElement { 
+//	private static final long serialVersionUID = 1L;
+//}
+

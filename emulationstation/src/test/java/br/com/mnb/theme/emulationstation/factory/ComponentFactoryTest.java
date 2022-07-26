@@ -10,6 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import br.com.mnb.theme.core.builder.ComponentBuilder;
+import br.com.mnb.theme.core.xml.view.View;
 import br.com.mnb.theme.emulationstation.xml.element.Datetime;
 import br.com.mnb.theme.emulationstation.xml.element.HelpSystem;
 import br.com.mnb.theme.emulationstation.xml.element.Image;
@@ -20,7 +21,6 @@ import br.com.mnb.theme.emulationstation.xml.element.Text;
 import br.com.mnb.theme.emulationstation.xml.element.TextList;
 import br.com.mnb.theme.emulationstation.xml.element.Video;
 import br.com.mnb.theme.emulationstation.xml.theme.EmulationStationTheme;
-import br.com.mnb.theme.emulationstation.xml.view.View;
 
 public class ComponentFactoryTest {
 

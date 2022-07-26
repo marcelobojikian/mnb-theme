@@ -1,4 +1,4 @@
-package br.com.mnb.theme.batocera.xml.feature;
+package br.com.mnb.theme.core.model;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
@@ -6,13 +6,13 @@ import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import br.com.mnb.theme.core.xml.feature.AbstractFeature;
 
 @XStreamAlias("feature")
-public class CarouselFeature extends AbstractFeature {
+public class SecondFeature extends AbstractFeature {
 
 	private static final long serialVersionUID = 1L;
 
 	@XStreamAlias("supported")
 	@XStreamAsAttribute
-	private String supported = "carousel";
+	private String supported = "second";
 
 	@Override
 	public String getSupported() {

@@ -10,17 +10,18 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import br.com.mnb.theme.batocera.builder.BatoceraBuilder;
 import br.com.mnb.theme.batocera.xml.element.BatoceraCarousel;
 import br.com.mnb.theme.batocera.xml.element.Text;
 import br.com.mnb.theme.batocera.xml.element.Video;
-import br.com.mnb.theme.batocera.xml.feature.AbstractFeature;
-import br.com.mnb.theme.batocera.xml.feature.BatoceraFeature;
 import br.com.mnb.theme.batocera.xml.feature.CarouselFeature;
 import br.com.mnb.theme.batocera.xml.feature.VideoFeature;
 import br.com.mnb.theme.batocera.xml.theme.BatoceraTheme;
-import br.com.mnb.theme.batocera.xml.view.View;
+import br.com.mnb.theme.core.builder.ComponentBuilder;
 import br.com.mnb.theme.core.xml.element.CommonElement;
+import br.com.mnb.theme.core.xml.feature.AbstractFeature;
+import br.com.mnb.theme.core.xml.feature.FeatureElement;
+import br.com.mnb.theme.core.xml.view.View;
+import br.com.mnb.theme.core.xml.view.ViewElement;
 
 class BatoceraFactoryTest {
 
@@ -34,7 +35,7 @@ class BatoceraFactoryTest {
 	@Test
 	void sucessWhenCreateBatoceraThemeWithBatoceraBuilder() {
 
-		BatoceraBuilder builder = new BatoceraBuilder();
+		ComponentBuilder builder = new ComponentBuilder();
 		BatoceraFactory factory = new BatoceraFactory(builder);
 
 		BatoceraTheme theme = factory.createTheme(4);
@@ -89,7 +90,7 @@ class BatoceraFactoryTest {
 	@Test
 	void sucessWhenCreateFeature_Carousel() {
 		
-		BatoceraFeature feature = factory.createFeatureCarousel();
+		FeatureElement feature = factory.createFeatureCarousel();
 		
 		testFeatureLvl(feature, CarouselFeature.class, "carousel");
 		testFeatureViewLvl(feature, "system", BatoceraCarousel.class, "systemcarousel");
@@ -104,7 +105,7 @@ class BatoceraFactoryTest {
 	@Test
 	void sucessWhenCreateFeature_Video() {
 		
-		BatoceraFeature feature = factory.createFeatureVideo();
+		FeatureElement feature = factory.createFeatureVideo();
 		
 		testFeatureLvl(feature, VideoFeature.class, "video");
 		testFeatureViewLvl(feature, "video", Video.class, "md_video");
@@ -123,14 +124,14 @@ class BatoceraFactoryTest {
 		assertNotNull(element.getContent());
 	}
 	
-	void testFeatureLvl(BatoceraFeature feature, Class<? extends AbstractFeature> type, String supperted) {
+	void testFeatureLvl(FeatureElement feature, Class<? extends AbstractFeature> type, String supperted) {
 		assertInstanceOf(type, feature);
 		assertInstanceOf(View.class, feature.getView());
 		assertEquals(feature.getSupported(), supperted);
 	}
 	
-	void testFeatureViewLvl(BatoceraFeature feature, String nameView, Class<? extends CommonElement> typeElement, String nameElement) {
-		View viewFeature = feature.getView(); 
+	void testFeatureViewLvl(FeatureElement feature, String nameView, Class<? extends CommonElement> typeElement, String nameElement) {
+		ViewElement viewFeature = feature.getView(); 
 		assertEquals(viewFeature.getName(), nameView);
 		
 		List<CommonElement> elements = viewFeature.getElements();

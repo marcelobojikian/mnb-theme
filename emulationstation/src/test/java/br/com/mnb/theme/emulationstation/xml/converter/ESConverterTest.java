@@ -5,8 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.junit.jupiter.api.Test;
 
+import br.com.mnb.theme.core.xml.view.View;
 import br.com.mnb.theme.emulationstation.xml.theme.EmulationStationTheme;
-import br.com.mnb.theme.emulationstation.xml.view.View;
 
 class ESConverterTest {
 	

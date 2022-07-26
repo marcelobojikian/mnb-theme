@@ -11,11 +11,14 @@ import java.util.Arrays;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import br.com.mnb.theme.core.model.Feature;
 import br.com.mnb.theme.core.model.Element;
 import br.com.mnb.theme.core.model.SecondElement;
 import br.com.mnb.theme.core.model.Theme;
-import br.com.mnb.theme.core.model.View;
-import br.com.mnb.theme.core.xml.converter.TagThemeConverter;
+import br.com.mnb.theme.core.model.SecondFeature;
+import br.com.mnb.theme.core.xml.feature.FeatureElement;
+import br.com.mnb.theme.core.xml.tag.converter.TagThemeConverter;
+import br.com.mnb.theme.core.xml.view.View;
 import br.com.mnb.theme.core.xml.view.ViewElement;
 
 class AbstractThemeTest {
@@ -26,7 +29,9 @@ class AbstractThemeTest {
 	public void setup() {
 		converter = new TagThemeConverter();
 		converter.setTheme(Theme.class);
-		converter.addView("view", View.class);
+		converter.addAlias("feature", FeatureElement.class);
+		converter.addFeature("first", Feature.class);
+		converter.addFeature("second", SecondFeature.class);
 		converter.addElement("element", Element.class);
 		converter.addElement("second", SecondElement.class);
 	}
@@ -79,7 +84,7 @@ class AbstractThemeTest {
 		View view = new View();
 		view.setName("ViewElement");
 
-		theme.getViewElements().add(view);
+		theme.addViews(view);
 
 		String contentXml = converter.toXML(theme);
 		// @formatter:off
@@ -155,6 +160,48 @@ class AbstractThemeTest {
 	}
 
 	@Test
+	public void sucessWhenCreateXml_ThemeWithOneFeature() {
+
+		Theme theme = new Theme();
+
+		Feature feature = new Feature();
+
+		theme.getFeatures().add(feature);
+
+		String contentXml = converter.toXML(theme);
+		// @formatter:off
+		String result = "<theme>\n"
+				  	  + "  <feature supported=\"first\"/>\n"
+					  + "</theme>";
+		// @formatter:on
+
+		assertEquals(contentXml, result);
+
+	}
+
+	@Test
+	public void sucessWhenCreateXml_ThemeWithTwoFeature() {
+
+		Theme theme = new Theme();
+
+		Feature firstFeature = new Feature();
+		SecondFeature secondFeature = new SecondFeature();
+
+		theme.setFeatures(Arrays.asList(firstFeature, secondFeature));
+
+		String contentXml = converter.toXML(theme);
+		// @formatter:off
+		String result = "<theme>\n"
+					  + "  <feature supported=\"first\"/>\n"
+					  + "  <feature supported=\"second\"/>\n"
+					  + "</theme>";
+		// @formatter:on
+
+		assertEquals(contentXml, result);
+
+	}
+
+	@Test
 	void sucessWhenConvertToJava_Theme() {
 
 		// @formatter:off
@@ -164,6 +211,8 @@ class AbstractThemeTest {
 					  + "  <include>Include Two</include>\n"
 					  + "  <view name=\"ViewOne\"/>\n"
 					  + "  <view name=\"ViewTwo\"/>\n"
+					  + "  <feature supported=\"first\"/>\n"
+					  + "  <feature supported=\"second\"/>\n"
 					  + "</theme>";
 		// @formatter:on
 
@@ -179,6 +228,14 @@ class AbstractThemeTest {
 		ViewElement viewTwo = themeObj.getViewElements().get(1);
 		assertInstanceOf(View.class, viewTwo);
 		assertEquals(viewTwo.getName(), "ViewTwo");
+		
+		FeatureElement carousel = themeObj.getFeatures().get(0);
+		assertInstanceOf(Feature.class, carousel);
+		assertEquals(carousel.getSupported(), "first");
+		
+		FeatureElement video = themeObj.getFeatures().get(1);
+		assertInstanceOf(SecondFeature.class, video);
+		assertEquals(video.getSupported(), "second");
 
 	}
 

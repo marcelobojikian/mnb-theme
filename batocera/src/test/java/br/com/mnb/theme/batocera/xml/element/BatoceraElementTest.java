@@ -1,4 +1,4 @@
-package br.com.mnb.theme.emulationstation.xml.element;
+package br.com.mnb.theme.batocera.xml.element;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
@@ -15,7 +15,7 @@ import br.com.mnb.theme.core.xml.element.AbstractElement;
 import br.com.mnb.theme.core.xml.element.CommonElement;
 import br.com.mnb.theme.core.xml.tag.converter.TagElementConverter;
 
-public class ElementTest {
+class BatoceraElementTest {
 
 	TagElementConverter converter;
 	
@@ -31,6 +31,7 @@ public class ElementTest {
 		converter.add("sound", Sound.class);
 		converter.add("textlist", TextList.class);
 		converter.add("video", Video.class);
+		converter.add("carousel", BatoceraCarousel.class);
 	}
 
 	@Test
@@ -158,6 +159,16 @@ public class ElementTest {
 		successWhenConvertToJava(Datetime.class, "datetime", true, "DatetimeElement");
 	}
 
+	@Test
+	public void sucessWhenCreateXml_Element_BatoceraCarousel() {
+		sucessWhenCreateXml(new BatoceraCarousel(), "carousel", true, "TextElementCarousel");
+	}
+
+	@Test
+	void sucessWhenConvertToJava_Element_BatoceraCarousel() {
+		successWhenConvertToJava(BatoceraCarousel.class, "carousel", true, "TextElementCarousel");
+	}
+
 	void sucessWhenCreateXml(AbstractElement element, String tagName, boolean attributeExtra,  String attributeName) {
 
 		element.setName(attributeName);
@@ -193,16 +204,4 @@ public class ElementTest {
 		
 	}
 
-//	@Test
-//	void failWhenConvertElementToTagNameWithComponentUnmapped() {
-//		assertThrows(IllegalArgumentException.class, () -> {
-//			converter.toXML(new UnmappedElement());
-//		});
-//	}
-
 }
-
-//@XStreamAlias("unmapped")
-//class UnmappedElement extends AbstractElement { 
-//	private static final long serialVersionUID = 1L;
-//}

@@ -1,6 +1,6 @@
 package br.com.mnb.theme.emulationstation.xml.converter;
 
-import br.com.mnb.theme.core.xml.converter.TagThemeConverter;
+import br.com.mnb.theme.core.xml.tag.converter.TagThemeConverter;
 import br.com.mnb.theme.emulationstation.xml.element.Datetime;
 import br.com.mnb.theme.emulationstation.xml.element.HelpSystem;
 import br.com.mnb.theme.emulationstation.xml.element.Image;
@@ -11,7 +11,6 @@ import br.com.mnb.theme.emulationstation.xml.element.Text;
 import br.com.mnb.theme.emulationstation.xml.element.TextList;
 import br.com.mnb.theme.emulationstation.xml.element.Video;
 import br.com.mnb.theme.emulationstation.xml.theme.EmulationStationTheme;
-import br.com.mnb.theme.emulationstation.xml.view.View;
 
 public class ESConverter {
 	
@@ -20,7 +19,7 @@ public class ESConverter {
 	public ESConverter() {
 		converter = new TagThemeConverter();
 		converter.setTheme(EmulationStationTheme.class);
-		converter.addView("view", View.class);
+		
 		converter.addElement("text", Text.class);
 		converter.addElement("image", Image.class);
 		converter.addElement("datetime", Datetime.class);

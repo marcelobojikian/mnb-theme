@@ -7,10 +7,10 @@ import org.junit.jupiter.api.Test;
 
 import br.com.mnb.theme.core.model.Element;
 import br.com.mnb.theme.core.model.Theme;
-import br.com.mnb.theme.core.model.View;
 import br.com.mnb.theme.core.xml.element.AbstractElement;
 import br.com.mnb.theme.core.xml.theme.AbstractTheme;
 import br.com.mnb.theme.core.xml.view.AbstractViewElement;
+import br.com.mnb.theme.core.xml.view.View;
 
 class SimpleFactoryTest {
 

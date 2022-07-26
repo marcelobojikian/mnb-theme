@@ -9,10 +9,10 @@ import org.junit.jupiter.api.Test;
 
 import com.thoughtworks.xstream.XStream;
 
-import br.com.mnb.theme.core.model.View;
 import br.com.mnb.theme.core.xml.element.AbstractElement;
 import br.com.mnb.theme.core.xml.tag.NamedTagConverter;
 import br.com.mnb.theme.core.xml.view.AbstractViewElement;
+import br.com.mnb.theme.core.xml.view.View;
 
 class TagViewConfigureTest {
 	

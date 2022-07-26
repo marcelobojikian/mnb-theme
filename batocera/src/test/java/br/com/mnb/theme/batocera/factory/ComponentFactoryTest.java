@@ -19,8 +19,8 @@ import br.com.mnb.theme.batocera.xml.element.Text;
 import br.com.mnb.theme.batocera.xml.element.TextList;
 import br.com.mnb.theme.batocera.xml.element.Video;
 import br.com.mnb.theme.batocera.xml.theme.BatoceraTheme;
-import br.com.mnb.theme.batocera.xml.view.View;
 import br.com.mnb.theme.core.builder.ComponentBuilder;
+import br.com.mnb.theme.core.xml.view.View;
 
 class ComponentFactoryTest {
 

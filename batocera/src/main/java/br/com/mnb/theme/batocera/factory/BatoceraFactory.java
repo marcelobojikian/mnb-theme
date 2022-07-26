@@ -2,23 +2,23 @@ package br.com.mnb.theme.batocera.factory;
 
 import java.util.Map;
 
-import br.com.mnb.theme.batocera.builder.BatoceraBuilder;
 import br.com.mnb.theme.batocera.xml.element.BatoceraCarousel;
 import br.com.mnb.theme.batocera.xml.element.Text;
 import br.com.mnb.theme.batocera.xml.element.Video;
 import br.com.mnb.theme.batocera.xml.feature.CarouselFeature;
 import br.com.mnb.theme.batocera.xml.feature.VideoFeature;
 import br.com.mnb.theme.batocera.xml.theme.BatoceraTheme;
+import br.com.mnb.theme.core.builder.ComponentBuilder;
 
 public class BatoceraFactory extends ComponentFactory {
 
-	private BatoceraBuilder builder;
+	private ComponentBuilder builder;
 
 	public BatoceraFactory() {
-		this(new BatoceraBuilder());
+		this(new ComponentBuilder());
 	}
 
-	public BatoceraFactory(BatoceraBuilder builder) {
+	public BatoceraFactory(ComponentBuilder builder) {
 		super(builder);
 		this.builder = builder;
 	}

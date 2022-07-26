@@ -10,17 +10,21 @@ import br.com.mnb.theme.core.factory.SimpleFactory;
 import br.com.mnb.theme.core.xml.Content;
 import br.com.mnb.theme.core.xml.element.AbstractElement;
 import br.com.mnb.theme.core.xml.element.CommonElement;
+import br.com.mnb.theme.core.xml.feature.AbstractFeature;
 import br.com.mnb.theme.core.xml.theme.AbstractTheme;
 import br.com.mnb.theme.core.xml.view.AbstractViewElement;
+import br.com.mnb.theme.core.xml.view.View;
 
-public class ComponentBuilder implements ThemeBuilder, ViewBuilder, ElementBuilder {
+public class ComponentBuilder implements ThemeBuilder, FeatureBuilder, ViewBuilder, ElementBuilder {
 
 	private ExtensionFactory<AbstractTheme> themeFactory;
+	private ExtensionFactory<AbstractFeature> featureFactory;
 	private ExtensionFactory<AbstractElement> elementFactory;
 	private ExtensionFactory<AbstractViewElement> viewFactory;
 	
 	public ComponentBuilder() {
 		this.themeFactory = new SimpleFactory<AbstractTheme>();
+		this.featureFactory = new SimpleFactory<AbstractFeature>();
 		this.elementFactory = new SimpleFactory<AbstractElement>();
 		this.viewFactory = new SimpleFactory<AbstractViewElement>();
 	}
@@ -41,6 +45,30 @@ public class ComponentBuilder implements ThemeBuilder, ViewBuilder, ElementBuild
 		theme.setViewElements(new ArrayList<>());
 		theme.setIncludes(new ArrayList<>(Arrays.asList(includes)));
 		return theme;
+	}
+
+	@Override
+	public <T extends AbstractFeature> T createFeature(Class<T> clazz, String viewName) {
+		T feature = featureFactory.create(clazz);
+		View view = createView(View.class, viewName);
+		feature.setView(view);
+		return feature;
+	}
+
+	@Override
+	public <T extends AbstractFeature> T createFeature(Class<T> clazz, String viewName, CommonElement... elements) {
+		T feature = featureFactory.create(clazz);
+		View view = createView(View.class, viewName, new ArrayList<>(Arrays.asList(elements)));
+		feature.setView(view);
+		return feature;
+	}
+
+	@Override
+	public <T extends AbstractFeature> T createFeature(Class<T> clazz, String viewName, List<CommonElement> elements) {
+		T feature = featureFactory.create(clazz);
+		View view = createView(View.class, viewName, elements);
+		feature.setView(view);
+		return feature;
 	}
 
 	@Override
@@ -118,6 +146,14 @@ public class ComponentBuilder implements ThemeBuilder, ViewBuilder, ElementBuild
 
 	public void setElementFactory(ExtensionFactory<AbstractElement> elementFactory) {
 		this.elementFactory = elementFactory;
+	}
+
+	public ExtensionFactory<AbstractFeature> getFeatureFactory() {
+		return featureFactory;
+	}
+
+	public void setFeatureFactory(ExtensionFactory<AbstractFeature> featureFactory) {
+		this.featureFactory = featureFactory;
 	}
 
 	public ExtensionFactory<AbstractViewElement> getViewFactory() {

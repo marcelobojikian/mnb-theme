@@ -13,28 +13,24 @@ import br.com.mnb.theme.core.xml.element.AbstractElement;
 import br.com.mnb.theme.core.xml.feature.AbstractFeature;
 import br.com.mnb.theme.core.xml.feature.FeatureElement;
 import br.com.mnb.theme.core.xml.tag.NamedTagConverter;
-import br.com.mnb.theme.core.xml.theme.AbstractTheme;
 import br.com.mnb.theme.core.xml.view.AbstractViewElement;
 import br.com.mnb.theme.core.xml.xstream.XStreamConfigure;
 import br.com.mnb.theme.core.xml.xstream.converter.ContentXstreamConverter;
 import br.com.mnb.theme.core.xml.xstream.converter.ElementXstreamConverter;
 import br.com.mnb.theme.core.xml.xstream.converter.FeatureXStreamConverter;
 
-public class TagThemeConfigure implements XStreamConfigure {
+public class TagFeatureConfigure implements XStreamConfigure {
 	
-	public static final String THEME_ELEMENT_NAME = "theme";
-	private Class<? extends AbstractTheme> themeClass;
-
 	Set<Class<?>> allowTypes = new HashSet<>();
 	Map<String, Class<?>> aliasMap = new HashMap<>();
 	NamedTagConverter<AbstractElement> elementConverter;
 	NamedTagConverter<AbstractViewElement> viewConverter;
 	NamedTagConverter<AbstractFeature> featureConverter;
 	
-	public TagThemeConfigure(NamedTagConverter<AbstractFeature> featureConverter, NamedTagConverter<AbstractViewElement> viewConverter, NamedTagConverter<AbstractElement> elementConverter) {
+	public TagFeatureConfigure(NamedTagConverter<AbstractFeature> featureConverter, NamedTagConverter<AbstractViewElement> viewConverter, NamedTagConverter<AbstractElement> elementConverter) {
 		this.featureConverter = featureConverter;
-		this.elementConverter = elementConverter;
 		this.viewConverter = viewConverter;
+		this.elementConverter = elementConverter;
 
 		this.allowTypes.add(Content.class);
 		this.allowTypes.add(FeatureElement.class);
@@ -86,13 +82,5 @@ public class TagThemeConfigure implements XStreamConfigure {
 		allowTypes.add(clazz);
 		featureConverter.put(name, clazz);
 	}
-
-	public void setTheme(Class<? extends AbstractTheme> clazz) {		
-		if(themeClass != null) {
-			allowTypes.remove(themeClass);
-		}
-		allowTypes.add(clazz);
-		themeClass = clazz;
-	}
-
+	
 }

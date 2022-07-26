@@ -10,11 +10,11 @@ import br.com.mnb.theme.batocera.xml.element.Sound;
 import br.com.mnb.theme.batocera.xml.element.Text;
 import br.com.mnb.theme.batocera.xml.element.TextList;
 import br.com.mnb.theme.batocera.xml.element.Video;
-import br.com.mnb.theme.batocera.xml.feature.BatoceraFeature;
 import br.com.mnb.theme.batocera.xml.feature.CarouselFeature;
 import br.com.mnb.theme.batocera.xml.feature.VideoFeature;
 import br.com.mnb.theme.batocera.xml.theme.BatoceraTheme;
-import br.com.mnb.theme.batocera.xml.view.View;
+import br.com.mnb.theme.core.xml.feature.FeatureElement;
+import br.com.mnb.theme.core.xml.tag.converter.TagThemeConverter;
 
 public class BatoceraConverter {
 	
@@ -24,11 +24,9 @@ public class BatoceraConverter {
 		converter = new TagThemeConverter();
 		converter.setTheme(BatoceraTheme.class);
 		
-		converter.addAlias("feature", BatoceraFeature.class);
+		converter.addAlias("feature", FeatureElement.class);
 		converter.addFeature("carousel", CarouselFeature.class);
 		converter.addFeature("video", VideoFeature.class);
-		
-		converter.addView("view", View.class);
 		
 		converter.addElement("text", Text.class);
 		converter.addElement("image", Image.class);

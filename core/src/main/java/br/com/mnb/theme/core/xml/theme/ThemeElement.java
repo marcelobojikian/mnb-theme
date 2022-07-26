@@ -3,6 +3,7 @@ package br.com.mnb.theme.core.xml.theme;
 import java.io.Serializable;
 import java.util.List;
 
+import br.com.mnb.theme.core.xml.feature.FeatureElement;
 import br.com.mnb.theme.core.xml.view.ViewElement;
 
 public interface ThemeElement extends Serializable {
@@ -12,5 +13,7 @@ public interface ThemeElement extends Serializable {
 	public List<ViewElement> getViewElements();
 
 	public List<String> getIncludes();
+
+	public List<FeatureElement> getFeatures();
 
 }
