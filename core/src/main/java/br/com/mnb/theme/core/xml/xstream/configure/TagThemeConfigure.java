@@ -6,6 +6,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.thoughtworks.xstream.XStream;
 
 import br.com.mnb.theme.core.xml.Content;
@@ -21,6 +24,8 @@ import br.com.mnb.theme.core.xml.xstream.converter.ElementXstreamConverter;
 import br.com.mnb.theme.core.xml.xstream.converter.FeatureXStreamConverter;
 
 public class TagThemeConfigure implements XStreamConfigure {
+	
+	private static Logger log = LoggerFactory.getLogger(TagThemeConfigure.class);
 	
 	public static final String THEME_ELEMENT_NAME = "theme";
 	private Class<? extends AbstractTheme> themeClass;
@@ -43,6 +48,7 @@ public class TagThemeConfigure implements XStreamConfigure {
 	@Override
 	public void defineAllowTypes(XStream xstream) {
 		Class<?>[] classes = new Class[allowTypes.size()];
+		log.debug("Define AllowTypes {}", classes.toString());
 		xstream.allowTypes(allowTypes.toArray(classes));
 	}
 
@@ -51,6 +57,7 @@ public class TagThemeConfigure implements XStreamConfigure {
 		for (Class<?> clazz : allowTypes) {
 			xstream.processAnnotations(clazz);
 		}
+		log.debug("Define ProcessAnnotations {}", allowTypes);
 	}
 	
 	@Override
@@ -58,6 +65,7 @@ public class TagThemeConfigure implements XStreamConfigure {
 		for (Entry<String, Class<?>> entry : aliasMap.entrySet()) {
 			xstream.alias(entry.getKey(), entry.getValue());
 		}
+		log.debug("Define Alias {}", aliasMap);
 	}
 	
 	@Override
