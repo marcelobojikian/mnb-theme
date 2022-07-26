@@ -11,7 +11,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import br.com.mnb.theme.core.factory.SimpleFactory;
-import br.com.mnb.theme.core.model.View;
 import br.com.mnb.theme.core.xml.tag.NamedTagConverter;
 
 class ViewConverterTest {

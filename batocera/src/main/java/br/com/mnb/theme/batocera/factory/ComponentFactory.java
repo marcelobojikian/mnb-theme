@@ -13,10 +13,10 @@ import br.com.mnb.theme.batocera.xml.element.Sound;
 import br.com.mnb.theme.batocera.xml.element.Text;
 import br.com.mnb.theme.batocera.xml.element.TextList;
 import br.com.mnb.theme.batocera.xml.element.Video;
-import br.com.mnb.theme.batocera.xml.view.View;
 import br.com.mnb.theme.core.builder.ComponentBuilder;
 import br.com.mnb.theme.core.xml.element.CommonElement;
 import br.com.mnb.theme.core.xml.theme.AbstractTheme;
+import br.com.mnb.theme.core.xml.view.View;
 
 class ComponentFactory {
 	

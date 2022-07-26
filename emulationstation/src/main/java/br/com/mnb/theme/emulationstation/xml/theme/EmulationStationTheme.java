@@ -6,7 +6,7 @@ import java.util.Arrays;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 import br.com.mnb.theme.core.xml.theme.AbstractTheme;
-import br.com.mnb.theme.emulationstation.xml.view.View;
+import br.com.mnb.theme.core.xml.view.View;
 
 @XStreamAlias("theme")
 public class EmulationStationTheme extends AbstractTheme {

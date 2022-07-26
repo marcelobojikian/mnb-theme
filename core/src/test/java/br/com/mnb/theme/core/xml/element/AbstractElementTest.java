@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 import br.com.mnb.theme.core.model.Element;
 import br.com.mnb.theme.core.model.SecondElement;
 import br.com.mnb.theme.core.xml.Content;
-import br.com.mnb.theme.core.xml.converter.TagElementConverter;
+import br.com.mnb.theme.core.xml.tag.converter.TagElementConverter;
 
 class AbstractElementTest {
 
