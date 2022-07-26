@@ -16,7 +16,10 @@
 	<properties>
 		<java.version>1.8</java.version>
 		<spring-boot-starter-test-version>2.6.0-SNAPSHOT</spring-boot-starter-test-version>
+
 		<jacoco.version>0.8.8</jacoco.version>
+		<sonar.organization>marcelobojikian</sonar.organization>
+		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 		<sonar.coverage.jacoco.xmlReportPaths>
 			${project.basedir}/reports/target/site/jacoco-aggregate/jacoco.xml
 		</sonar.coverage.jacoco.xmlReportPaths>
