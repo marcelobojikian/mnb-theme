@@ -1,9 +1,9 @@
 <h1 align="center">
-    Theme-Batocera v1.0
+    MNB Theme - Batocera v1.0
 </h1>
 
 <h4 align="center">
-  Sistema de conversão de layout para o sistema Batocera.
+    Layout conversion system for Batocera module.
 </h4>
 
 <p align="center">
@@ -11,9 +11,16 @@
 </p>
 
 <p align="center">
+  <img alt="Security Rating" src="https://sonarcloud.io/api/project_badges/measure?project=marcelobojikian_mnb-theme&metric=security_rating" />
+  <img alt="Bugs" src="https://sonarcloud.io/api/project_badges/measure?project=marcelobojikian_mnb-theme&metric=bugs" />
+  <img alt="Vulnerabilities" src="https://sonarcloud.io/api/project_badges/measure?project=marcelobojikian_mnb-theme&metric=vulnerabilities" />
+  <img alt="Coverage" src="https://sonarcloud.io/api/project_badges/measure?project=marcelobojikian_mnb-theme&metric=coverage" />
+</p>
+
+<p align="center">
 
   <a href="https://github.com/marcelobojikian" target="_blank">
-    <img alt="Feito por Marcelo Nogueira" src="https://img.shields.io/badge/Feito%20por-Marcelo_Nogueira-informational">
+    <img alt="Made by Marcelo Nogueira" src="https://img.shields.io/badge/Made%20by-Marcelo_Nogueira-informational">
   </a>
   <a href="https://github.com/marcelobojikian" target="_blank" >
     <img alt="Github - Marcelo Nogueira" src="https://img.shields.io/badge/Github--%23F8952D?style=social&logo=github">
@@ -25,136 +32,195 @@
 </p>
 
 <p align="center">
-  <a href="#-projeto">Projeto</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-  <a href="#-pre-requisitos">Pré-requisitos</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-  <a href="#-como-usar">Como usar</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-  <a href="#memo-licença">Licença</a>
+  <a href="#-module">Module</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <a href="#-structure">Structure</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <a href="#-how-to-use">How to use</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <a href="#memo-license">License</a>
 </p>
 
 <br>
 
-## 💻 Projeto
+## 💻 Module
 
-O sistema tem o objetivo de criar layout do emulationstation, convertendo do codigo Java para o XML. Existe outros sistemas que tem variações desse layout, por exemplo [Batocera](https://github.com/batocera-linux/batocera-emulationstation), [EmuELEC](https://github.com/EmuELEC/emuelec-emulationstation) e [RetroPie](https://github.com/RetroPie/EmulationStation) porém todos tem como base o modelo inicial de [Aloshi](https://github.com/Aloshi/EmulationStation). O projeto ainda não está concluido porém em breve finalizarei.
+This module is modeled on the XML conversion made specially for the **Batocera** system, it is recommended to check its [documentation](https://github.com/batocera-linux/batocera-emulationstation) to know how its XML structure and its particularities were designed.
 
-O projeto foi desenvolvido em Java utilizando as ferramentas:
+Since all the modules of this project depend on the Core, it is also strongly recommended to know its structure and concepts behind each class and interface, this will help and guide you in the planning of future features and help maintain its code integrity and cohesiveness.
 
-<ul>
-  <li>Spring Boot Test</li>
-  <li>Maven - Gerenciador de dependências, compilação ... </li>
-  <li>XStream- Conversão de Java para XML</li>
-  <li>JaCoCo - Um gerador de relatórios de cobertura de código</li>
-</ul>
+For your collaboration in this module, it is fundamental the knowledge of the concepts of Object Orientation and Design Patterns, and also of some tools that will help you in the automated tests such as Mockito.
 
-Para a colaboração no projeto, é fundamental o conhecimento dessas ferramentas, de orientação objeto e padão de projeto.
+## 🔖 Structure
 
-## 🔖 Pre-requisitos (caso queira colaborar)
+In order to help and motivate future developers, regardless of their level of knowledge, a brief explanation of the division of the packages of this module will be made.
 
-Para utilizar o sistema, faça um clone do mesmo para sua maquina.
+See below how that module is configured:
 
-| git clone https://github.com/marcelobojikian/Theme-Java.git
+```java
+package br.com.mnb.theme.batocera.xml.theme;
+package br.com.mnb.theme.batocera.xml.feature;
+package br.com.mnb.theme.batocera.xml.element;
+```
 
-Inicia a IDE de sua preferência e baixe as dependências do maven, por exemplo:
+In these packages are located all the XML tags of the system that will be converted into Java.
 
-| mvn build
+```java
+package br.com.mnb.theme.batocera.xml.configure;
+```
 
-Feito isso, você já pode colaborar com alguns codigos :)
+In this package was made a manual configuration of XStream and it illustrates the possibility of customizing more complex configurations.
 
+```java
+package br.com.mnb.theme.batocera.xml.converter;
+```
 
-## 🤔 Como usar
+Here you will find converters from all over the system, see further on how you should use this class.
 
-O sistema ainda não está completo porém já é possível realizar algumas conversão de Java para xml.
+```java
+package br.com.mnb.theme.batocera.factory;
+```
 
-Para criar os elementos no padrão do Batocera, basta iniciar uma **Factory**, nesse caso **BatoceraFactory**.
+In this package you will find classes that should simplify the creation and construction of objects in this system.
+
+## 🤔 How to use
+
+See that the implementation must be simple, just inform the tag signature in **@XStreamAlias** and say that it is an **AbstractElement**. See an example:
+
+```java
+@XStreamAlias("text")
+public class Text extends AbstractElement {
+    
+}
+```
+
+That class will be converted into
+
+```xml
+<text/>
+```
+
+Imagine that we have a tag with the signature **feature** for two different functionalities, what differentiates them is the **supported** information. In this case we must separate it in a different way with the **AbstractFeature**.
+
+```java
+@XStreamAlias("feature")
+public class CarouselFeature extends AbstractFeature {
+    @XStreamAlias("supported")
+    @XStreamAsAttribute
+    private String supported = "carousel";
+}
+
+@XStreamAlias("feature")
+public class VideoFeature extends AbstractFeature {
+    @XStreamAlias("supported")
+    @XStreamAsAttribute
+    private String supported = "video";
+}
+```
+
+Those classes will be converted into:
+
+```xml
+<feature supported="carousel"/>
+<feature supported="video"/>
+```
+
+After mapping the most used tags of the system, don't forget to map your root tag **<theme>**.
+
+```java
+@XStreamAlias("theme")
+public class BatoceraTheme extends AbstractTheme {
+
+}
+```
+
+That class will be converted into:
+
+```xml
+<theme/>
+```
+
+These are the configurations that are already implemented, but I haven't researched all the tags that exist for this system. So let's see how simple is the conversion from Java to XML, first let's create a theme for this system using our factory, located in the **factory** package.
 
 ```java
 BatoceraFactory factory = new BatoceraFactory();
-```
-
-Com a nossa **Factory** pronta, podemos começar a criar nosso layout do Batocera.
-
-```java
 BatoceraTheme theme = factory.createTheme(4);
 ```
 
-Podemos criar os elementos básicos vindo do projeto inicial e também do projeto especifico do Batocera, por exemplo:
+Notice that we pass parameter "4" that indicates which version of the theme we're going to use, something required in all systems. We can also create the basic elements of the system using the same factory, for example:
 
 ```java
-// Elementos do Batocera
+// Features
 factory.createFeatureCarousel();
 factory.createFeatureVideo();
 
-// Elementos básicos
+// Basic Elements
 factory.createImage("bezel", true);
 factory.createRating("md_rating");
 factory.createText("md_lbl_releasedate");
 factory.createDatetime("md_releasedate");
 ```
 
-Para criar o xml, basta utilizar a classe **BatoceraXmlConverter**.
+If you want to pass some data to the content of each element, you can use a **java.util.Map** to insert this information.
 
 ```java
-BatoceraXmlConverter xmlConverter = new BatoceraXmlConverter();
-xmlConverter.toXML(theme);
+// Features
+Map<String, String> attributes = new HashMap<>();
+attributes.put("mykey", "myvalue");
+
+factory.createFeatureCarousel(attributes);
+factory.createText("md_lbl_releasedate", attributes);
 ```
 
-É possível também criar um **BatoceraTheme** utilizando um XML.
-
-```java
-BatoceraTheme theme = xmlConverter.fromXML("myTheme.xml");
-```
-
-
-Veja um exemplo simples de um codigo completo:
+Now that we know how to create elements and insert value in each one, let's see a complete example.
 
 ```java
 BatoceraFactory factory = new BatoceraFactory();
 
 Map<String, String> attributes = new HashMap<>();
-attributes.put("TESTE_123", "true");
-		
+attributes.put("mykey", "myvalue");
+
 BatoceraTheme theme = factory.createTheme(4)
   .addFeatures(
-      factory.createFeatureCarousel(attributes)
-        .addElements(
-          factory.createLogoText(),
-          factory.createImage("seperator"),
-          factory.createSystemInfo()
-        ),
-    factory.createFeatureVideo()
-  )
-  .addViews(
-    factory.createView("system, basic, detailed, video")
-      .addElements(
-          factory.createImage("background_all", true),
-          factory.createHelpSystem("help")
-      ),
-    factory.createView("basic, detailed, video")
-      .addElements(
-          factory.createImage("logo"),
-          factory.createImage("help_seperator", true)
-      ),						
-    factory.createView("basic")
-      .addElements(
-          factory.createTextList("gamelist")
-      ),
-    factory.createView("detailed, video")
-      .addElements(
-          factory.createTextList("gamelist"),
-          factory.createImage("bezel", true),
-          factory.createText("md_description, md_lbl_rating, md_lbl_releasedate"),
-          factory.createText("md_lbl_rating"),
-          factory.createRating("md_rating")
-      )
-  );
-
-BatoceraXmlConverter xmlConverter = new BatoceraXmlConverter();
-xmlConverter.toXML(theme);
-
-System.out.println(xstream.toXML(theme));
+	      factory.createFeatureCarousel(attributes)
+	        .addElements(
+	          factory.createLogoText(),
+	          factory.createImage("seperator"),
+	          factory.createSystemInfo()
+	        ),
+	    factory.createFeatureVideo()
+	  )
+	  .addViews(
+	    factory.createView("system, basic, detailed, video")
+	      .addElements(
+	          factory.createImage("background_all", true),
+	          factory.createHelpSystem("help")
+	      ),
+	    factory.createView("basic, detailed, video")
+	      .addElements(
+	          factory.createImage("logo"),
+	          factory.createImage("help_seperator", true)
+	      ),						
+	    factory.createView("basic")
+	      .addElements(
+	          factory.createTextList("gamelist")
+	      ),
+	    factory.createView("detailed, video")
+	      .addElements(
+	          factory.createTextList("gamelist"),
+	          factory.createImage("bezel", true),
+	          factory.createText("md_description,md_lbl_rating, md_lbl_releasedate"),
+	          factory.createText("md_lbl_rating"),
+	          factory.createRating("md_rating")
+	      )
+	  );
 ```
 
-O resultado será:
+Now that we have our class mapped, we want to transform it into XML, for that we will use our class responsible for simplifying this task.
+
+```java
+BatoceraConverter converter = new BatoceraConverter();
+String xml = converter.toXML(theme);
+```
+
+The outcome will be:
 
 ```xml
 <theme>
@@ -177,25 +243,18 @@ O resultado será:
     <text name="md_lbl_rating"/>
     <rating name="md_rating"/>
   </view>
-  <feature class="feature" supported="carousel">
+  <feature supported="carousel">
     <view name="system">
       <carousel name="systemcarousel">
-        <TESTE__123>true</TESTE__123>
+        <mykey>meu valor</myvalue>
       </carousel>
-      <text name="logoText"/>
-      <image name="seperator"/>
-      <text name="systemInfo"/>
-    </view>
-  </feature>
-  <feature class="feature" supported="video">
-    <view name="video">
-      <video name="md_video"/>
     </view>
   </feature>
 </theme>
 ```
 
+Our "Converter" class has another method called **fromXML()** that will serve to convert from XML to Java, doing the opposite task of the one we just did.
 
-## :memo: Licença
+## :memo: License
 
-Esse projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
+This project is under the MIT license. See the [LICENSE](LICENSE) file for more details.
