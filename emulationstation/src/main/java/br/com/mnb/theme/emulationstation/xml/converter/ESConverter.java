@@ -1,5 +1,7 @@
 package br.com.mnb.theme.emulationstation.xml.converter;
 
+import java.io.File;
+
 import br.com.mnb.theme.core.xml.tag.converter.TagThemeConverter;
 import br.com.mnb.theme.emulationstation.xml.element.Datetime;
 import br.com.mnb.theme.emulationstation.xml.element.HelpSystem;
@@ -36,6 +38,10 @@ public class ESConverter {
 	}
 
 	public EmulationStationTheme fromXML(String xml) {
+		return (EmulationStationTheme) converter.fromXML(xml);
+	}
+
+	public EmulationStationTheme fromXML(File xml) {
 		return (EmulationStationTheme) converter.fromXML(xml);
 	}
 
