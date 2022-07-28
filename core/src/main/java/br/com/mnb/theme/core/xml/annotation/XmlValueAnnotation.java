@@ -29,13 +29,14 @@ public class XmlValueAnnotation<T> {
 	}
 
 	private String getValue(Class<? extends T> clazz) {
-		XStreamAlias element = null;
+		String value = null;
 		for (Annotation annotation : clazz.getDeclaredAnnotations()) {
             if (annotation.annotationType().isAssignableFrom(XStreamAlias.class)) {
-            	element = (XStreamAlias) annotation;
+            	XStreamAlias element = (XStreamAlias) annotation;
+            	value = element.value();
             }
         }
-		return element.value();
+		return value;
 	}
 
 	private String getSupported(Class<?> clazz) {
