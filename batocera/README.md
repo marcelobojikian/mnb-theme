@@ -72,7 +72,7 @@ In this package was made a manual configuration of XStream and it illustrates th
 package br.com.mnb.theme.batocera.xml.converter;
 ```
 
-Here you will find converters from all over the system, see further on how you should use this class.
+Here you will find converters from all over the system, see further on how you should use this package.
 
 ```java
 package br.com.mnb.theme.batocera.factory;
@@ -91,7 +91,7 @@ public class Text extends AbstractElement {
 }
 ```
 
-That class will be converted into
+That class will be converted into:
 
 ```xml
 <text/>
