@@ -1,0 +1,4 @@
+<theme>
+  <view name="ViewElement"/>
+  <view name="SecondViewElement"/>
+</theme>

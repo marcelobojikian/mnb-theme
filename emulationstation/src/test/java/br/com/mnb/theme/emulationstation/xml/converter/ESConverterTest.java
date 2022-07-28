@@ -3,6 +3,9 @@ package br.com.mnb.theme.emulationstation.xml.converter;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+
 import org.junit.jupiter.api.Test;
 
 import br.com.mnb.theme.core.xml.view.View;
@@ -64,6 +67,13 @@ class ESConverterTest {
 				  + "  <view name=\"ViewElement\"/>\n"
 				  + "  <view name=\"SecondViewElement\"/>\n"
 				  + "</theme>";
+		EmulationStationTheme theme = converter.fromXML(xml);
+		assertNotNull(theme);
+	}
+
+	@Test
+	public void sucessWhenFromXmlFile() throws FileNotFoundException {
+		File xml = new File(this.getClass().getResource("ESFileTest.xml").getFile());
 		EmulationStationTheme theme = converter.fromXML(xml);
 		assertNotNull(theme);
 	}
