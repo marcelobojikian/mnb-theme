@@ -22,7 +22,7 @@ class TagElementConfigureTest {
 	public void setup() {
 		NamedTagConverter<AbstractElement> converter = new NamedTagConverter<AbstractElement>();
 		TagElementConfigure configure = new TagElementConfigure(converter);
-		configure.addElement("element", Element.class);
+		configure.addElement(Element.class);
 		xstream = configure.getXStream();
 	}
 

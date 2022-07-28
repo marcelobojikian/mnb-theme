@@ -77,21 +77,21 @@ public class BatoceraConfigure implements XStreamConfigure {
 		xstream.registerConverter(new ContentXstreamConverter());
 		
 		NamedTagConverter<AbstractElement> elementConverter = new NamedTagConverter<AbstractElement>();
-		elementConverter.put("text", Text.class);
-		elementConverter.put("image", Image.class);
-		elementConverter.put("datetime", Datetime.class);
-		elementConverter.put("helpsystem", HelpSystem.class);
-		elementConverter.put("ninepatch", Ninepatch.class);
-		elementConverter.put("rating", Rating.class);
-		elementConverter.put("sound", Sound.class);
-		elementConverter.put("textlist", TextList.class);
-		elementConverter.put("video", Video.class);
-		elementConverter.put("carousel", BatoceraCarousel.class);		
+		elementConverter.put(Text.class);
+		elementConverter.put(Image.class);
+		elementConverter.put(Datetime.class);
+		elementConverter.put(HelpSystem.class);
+		elementConverter.put(Ninepatch.class);
+		elementConverter.put(Rating.class);
+		elementConverter.put(Sound.class);
+		elementConverter.put(TextList.class);
+		elementConverter.put(Video.class);
+		elementConverter.put(BatoceraCarousel.class);		
 		xstream.registerConverter(new ElementXstreamConverter(elementConverter));
 		
 		NamedTagConverter<AbstractFeature> featureConverter = new NamedTagConverter<AbstractFeature>();
-		featureConverter.put("carousel", CarouselFeature.class);
-		featureConverter.put("video", VideoFeature.class);
+		featureConverter.put(CarouselFeature.class);
+		featureConverter.put(VideoFeature.class);
 		xstream.registerConverter(new FeatureXStreamConverter(featureConverter));
 		
 	}

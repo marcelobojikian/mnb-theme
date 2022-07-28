@@ -19,9 +19,9 @@ public class TagElementConverter extends TypeConverterCached<TagElementConfigure
 		super(configure);
 	}
 	
-	public <T extends AbstractElement> void add(String name, Class<T> clazz) {
+	public <T extends AbstractElement> void add(Class<T> clazz) {
 		notifyChange();
-		getConfigure().addElement(name, clazz);
+		getConfigure().addElement(clazz);
 	}
 
 	public String toXML(CommonElement element) {

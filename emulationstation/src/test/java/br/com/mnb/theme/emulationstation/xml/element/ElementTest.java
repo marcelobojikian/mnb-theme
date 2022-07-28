@@ -22,15 +22,15 @@ public class ElementTest {
 	@BeforeEach
 	public void setup() {
 		converter = new TagElementConverter();
-		converter.add("text", Text.class);
-		converter.add("image", Image.class);
-		converter.add("datetime", Datetime.class);
-		converter.add("helpsystem", HelpSystem.class);
-		converter.add("ninepatch", Ninepatch.class);
-		converter.add("rating", Rating.class);
-		converter.add("sound", Sound.class);
-		converter.add("textlist", TextList.class);
-		converter.add("video", Video.class);
+		converter.add(Text.class);
+		converter.add(Image.class);
+		converter.add(Datetime.class);
+		converter.add(HelpSystem.class);
+		converter.add(Ninepatch.class);
+		converter.add(Rating.class);
+		converter.add(Sound.class);
+		converter.add(TextList.class);
+		converter.add(Video.class);
 	}
 
 	@Test

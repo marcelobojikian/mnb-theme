@@ -28,8 +28,8 @@ class ElementConverterTest {
 		when(factory.create(SecondElement.class)).thenReturn(new SecondElement());
 		
 		converter = new NamedTagConverter<AbstractElement>(factory);
-		converter.put("element", Element.class);
-		converter.put("second", SecondElement.class);
+		converter.put(Element.class);
+		converter.put(SecondElement.class);
 	}
 
 	@Test

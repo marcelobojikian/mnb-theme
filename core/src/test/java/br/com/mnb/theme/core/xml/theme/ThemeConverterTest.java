@@ -26,7 +26,7 @@ class ThemeConverterTest {
 		when(factory.create(Theme.class)).thenReturn(new Theme());
 		
 		converter = new NamedTagConverter<AbstractTheme>(factory);
-		converter.put("theme", Theme.class);
+		converter.put(Theme.class);
 	}
 
 	@Test

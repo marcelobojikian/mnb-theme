@@ -22,8 +22,8 @@ class AbstractElementTest {
 	@BeforeEach
 	public void setup() {
 		converter = new TagElementConverter();
-		converter.add("element", Element.class);
-		converter.add("second", SecondElement.class);
+		converter.add(Element.class);
+		converter.add(SecondElement.class);
 	}
 
 	@Test

@@ -25,7 +25,7 @@ class ViewConverterTest {
 		when(factory.create(View.class)).thenReturn(new View());
 		
 		converter = new NamedTagConverter<AbstractViewElement>(factory);
-		converter.put("view", View.class);
+		converter.put(View.class);
 	}
 
 	@Test

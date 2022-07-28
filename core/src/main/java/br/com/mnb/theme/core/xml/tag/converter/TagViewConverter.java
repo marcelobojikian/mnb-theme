@@ -20,14 +20,14 @@ public class TagViewConverter extends TypeConverterCached<TagViewConfigure> {
 		super(configure);
 	}
 
-	public <T extends AbstractViewElement> void addView(String name, Class<T> clazz) {
+	public <T extends AbstractViewElement> void addView(Class<T> clazz) {
 		notifyChange();
-		getConfigure().addView(name, clazz);
+		getConfigure().addView(clazz);
 	}
 
-	public <T extends AbstractElement> void addElement(String name, Class<T> clazz) {
+	public <T extends AbstractElement> void addElement(Class<T> clazz) {
 		notifyChange();
-		getConfigure().addElement(name, clazz);
+		getConfigure().addElement(clazz);
 	}
 
 	public String toXML(ViewElement element) {

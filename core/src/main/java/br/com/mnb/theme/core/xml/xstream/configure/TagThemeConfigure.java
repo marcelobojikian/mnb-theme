@@ -77,12 +77,12 @@ public class TagThemeConfigure implements XStreamConfigure {
 
 	public void addView(String name, Class<? extends AbstractViewElement> clazz) {
 		allowTypes.add(clazz);
-		viewConverter.put(name, clazz);
+		viewConverter.put(clazz);
 	}
 
 	public void addElement(String name, Class<? extends AbstractElement> clazz) {
 		allowTypes.add(clazz);
-		elementConverter.put(name, clazz);
+		elementConverter.put(clazz);
 	}
 	
 	public void addAlias(String name, Class<?> clazz) {
@@ -92,7 +92,7 @@ public class TagThemeConfigure implements XStreamConfigure {
 	
 	public void addFeature(String name, Class<? extends AbstractFeature> clazz) {
 		allowTypes.add(clazz);
-		featureConverter.put(name, clazz);
+		featureConverter.put(clazz);
 	}
 
 	public void setTheme(Class<? extends AbstractTheme> clazz) {		

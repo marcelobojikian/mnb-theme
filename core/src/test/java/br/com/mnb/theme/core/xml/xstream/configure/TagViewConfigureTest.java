@@ -23,7 +23,7 @@ class TagViewConfigureTest {
 		NamedTagConverter<AbstractViewElement> viewConverter = new NamedTagConverter<AbstractViewElement>();
 		NamedTagConverter<AbstractElement> elementConverter = new NamedTagConverter<AbstractElement>();
 		TagViewConfigure configure = new TagViewConfigure(viewConverter, elementConverter);
-		configure.addView("view", View.class);
+		configure.addView(View.class);
 		xstream = configure.getXStream();
 	}
 

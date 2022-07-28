@@ -75,10 +75,10 @@ class TagElementConverterTest {
 		converter = spy(new TagElementConverter(mockConfigure));
 		assertSame(converter.getConfigure(), mockConfigure);
 
-		converter.add("element", Element.class);
+		converter.add(Element.class);
 
 		verify(converter, times(1)).notifyChange();
-		verify(mockConfigure, times(1)).addElement("element", Element.class);
+		verify(mockConfigure, times(1)).addElement(Element.class);
 	}
 
 	@Test

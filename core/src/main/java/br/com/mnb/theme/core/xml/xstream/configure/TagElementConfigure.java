@@ -41,9 +41,9 @@ public class TagElementConfigure implements XStreamConfigure {
 		xstream.registerConverter(new ElementXstreamConverter(converter));
 	}
 
-	public void addElement(String name, Class<? extends AbstractElement> clazz) {
+	public void addElement(Class<? extends AbstractElement> clazz) {
 		allowTypes.add(clazz);
-		converter.put(name, clazz);
+		converter.put(clazz);
 	}
 
 }

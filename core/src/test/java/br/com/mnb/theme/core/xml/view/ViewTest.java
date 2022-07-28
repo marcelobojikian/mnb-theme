@@ -17,9 +17,9 @@ class ViewTest {
 	@BeforeEach
 	public void setup() {
 		converter = new TagViewConverter();
-		converter.addView("view", View.class);
-		converter.addElement("element", Element.class);
-		converter.addElement("second", SecondElement.class);
+		converter.addView(View.class);
+		converter.addElement(Element.class);
+		converter.addElement(SecondElement.class);
 	}
 
 	@Test

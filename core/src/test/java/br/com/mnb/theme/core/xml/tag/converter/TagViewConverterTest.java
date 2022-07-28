@@ -18,7 +18,6 @@ import com.thoughtworks.xstream.XStream;
 import br.com.mnb.theme.core.model.Element;
 import br.com.mnb.theme.core.xml.element.AbstractElement;
 import br.com.mnb.theme.core.xml.tag.NamedTagConverter;
-import br.com.mnb.theme.core.xml.tag.converter.TagViewConverter;
 import br.com.mnb.theme.core.xml.view.AbstractViewElement;
 import br.com.mnb.theme.core.xml.view.View;
 import br.com.mnb.theme.core.xml.xstream.configure.TagViewConfigure;
@@ -78,10 +77,10 @@ class TagViewConverterTest {
 		converter = spy(new TagViewConverter(mockConfigure));
 		assertSame(converter.getConfigure(), mockConfigure);
 		
-		converter.addView("view", View.class);
+		converter.addView(View.class);
 		
 		verify(converter, times(1)).notifyChange();
-		verify(mockConfigure, times(1)).addView("view", View.class);
+		verify(mockConfigure, times(1)).addView(View.class);
 	}
 
 	@Test
@@ -89,10 +88,10 @@ class TagViewConverterTest {
 		converter = spy(new TagViewConverter(mockConfigure));
 		assertSame(converter.getConfigure(), mockConfigure);
 		
-		converter.addElement("element", Element.class);
+		converter.addElement(Element.class);
 		
 		verify(converter, times(1)).notifyChange();
-		verify(mockConfigure, times(1)).addElement("element", Element.class);
+		verify(mockConfigure, times(1)).addElement(Element.class);
 	}
 
 	@Test

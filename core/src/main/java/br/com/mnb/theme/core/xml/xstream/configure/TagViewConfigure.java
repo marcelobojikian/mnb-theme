@@ -44,14 +44,14 @@ public class TagViewConfigure implements XStreamConfigure {
 		xstream.registerConverter(new ElementXstreamConverter(elementConverter));
 	}
 
-	public void addView(String name, Class<? extends AbstractViewElement> clazz) {
+	public void addView(Class<? extends AbstractViewElement> clazz) {
 		allowTypes.add(clazz);
-		viewConverter.put(name, clazz);
+		viewConverter.put(clazz);
 	}
 
-	public void addElement(String name, Class<? extends AbstractElement> clazz) {
+	public void addElement(Class<? extends AbstractElement> clazz) {
 		allowTypes.add(clazz);
-		elementConverter.put(name, clazz);
+		elementConverter.put(clazz);
 	}
 
 }

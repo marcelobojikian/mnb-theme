@@ -25,8 +25,8 @@ class FeatureElementTest {
 		when(factory.create(SecondFeature.class)).thenReturn(new SecondFeature());
 		
 		converter = new NamedTagConverter<AbstractFeature>(factory);
-		converter.put("first", Feature.class);
-		converter.put("second", SecondFeature.class);
+		converter.put(Feature.class);
+		converter.put(SecondFeature.class);
 	}
 
 	@Test
