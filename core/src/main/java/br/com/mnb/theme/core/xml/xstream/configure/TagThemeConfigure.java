@@ -1,5 +1,6 @@
 package br.com.mnb.theme.core.xml.xstream.configure;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -48,7 +49,7 @@ public class TagThemeConfigure implements XStreamConfigure {
 	@Override
 	public void defineAllowTypes(XStream xstream) {
 		Class<?>[] classes = new Class[allowTypes.size()];
-		log.debug("Define AllowTypes {}", classes.toString());
+		log.debug("Define AllowTypes {}", Arrays.toString(classes));
 		xstream.allowTypes(allowTypes.toArray(classes));
 	}
 
