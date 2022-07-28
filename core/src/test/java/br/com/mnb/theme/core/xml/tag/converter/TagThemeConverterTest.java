@@ -10,21 +10,21 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.withSettings;
 
+import java.io.File;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.thoughtworks.xstream.XStream;
 
-import br.com.mnb.theme.core.model.Feature;
 import br.com.mnb.theme.core.model.Element;
+import br.com.mnb.theme.core.model.Feature;
 import br.com.mnb.theme.core.model.Theme;
 import br.com.mnb.theme.core.xml.element.AbstractElement;
 import br.com.mnb.theme.core.xml.feature.AbstractFeature;
 import br.com.mnb.theme.core.xml.feature.FeatureElement;
 import br.com.mnb.theme.core.xml.tag.NamedTagConverter;
-import br.com.mnb.theme.core.xml.tag.converter.TagThemeConverter;
 import br.com.mnb.theme.core.xml.view.AbstractViewElement;
-import br.com.mnb.theme.core.xml.view.View;
 import br.com.mnb.theme.core.xml.xstream.configure.TagThemeConfigure;
 
 class TagThemeConverterTest {
@@ -138,6 +138,16 @@ class TagThemeConverterTest {
 		converter = spy(new TagThemeConverter(mockConfigure));
 		
 		String xml = "<theme/>";
+		converter.fromXML(xml);
+
+		verify(converter.getXStream(), times(1)).fromXML(xml);
+	}
+
+	@Test
+	public void sucessWhenElementFromXmlFile() {	
+		converter = spy(new TagThemeConverter(mockConfigure));
+		
+		File xml = new File("TagThemeFileTest.xml");
 		converter.fromXML(xml);
 
 		verify(converter.getXStream(), times(1)).fromXML(xml);

@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -14,6 +13,9 @@ import static org.mockito.Mockito.when;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
@@ -25,26 +27,24 @@ import br.com.mnb.theme.core.xml.feature.AbstractFeature;
 import br.com.mnb.theme.core.xml.tag.TagConverter;
 import br.com.mnb.theme.core.xml.view.View;
 
+@ExtendWith(MockitoExtension.class)
 class FeatureXStreamConverterTest {
 
 	FeatureXStreamConverter converter;
 
+	@Mock
 	HierarchicalStreamWriter mockHierarchicalStreamWriter;
+	@Mock
 	MarshallingContext mockMarshallingContext;
+	@Mock
 	HierarchicalStreamReader mockHierarchicalStreamReader;
+	@Mock
 	UnmarshallingContext mockUnmarshallingContext;
+	@Mock
 	TagConverter<AbstractFeature, String> mockTagConverter;
 
 	@BeforeEach
-	@SuppressWarnings("unchecked")
-	public void setup() {
-		mockHierarchicalStreamWriter = mock(HierarchicalStreamWriter.class);
-		mockMarshallingContext = mock(MarshallingContext.class);
-		mockHierarchicalStreamReader = mock(HierarchicalStreamReader.class);
-		mockUnmarshallingContext = mock(UnmarshallingContext.class);
-		
-		mockTagConverter = mock(TagConverter.class);
-		
+	public void setup() {		
 		converter = new FeatureXStreamConverter(mockTagConverter);		
 	}
 

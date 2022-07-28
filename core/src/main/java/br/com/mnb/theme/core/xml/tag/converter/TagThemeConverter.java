@@ -1,5 +1,7 @@
 package br.com.mnb.theme.core.xml.tag.converter;
 
+import java.io.File;
+
 import br.com.mnb.theme.core.xml.element.AbstractElement;
 import br.com.mnb.theme.core.xml.feature.AbstractFeature;
 import br.com.mnb.theme.core.xml.tag.NamedTagConverter;
@@ -49,6 +51,10 @@ public class TagThemeConverter extends TypeConverterCached<TagThemeConfigure> {
 	}
 
 	public ThemeElement fromXML(String xml) {
+		return (ThemeElement) getXStream().fromXML(xml);
+	}
+
+	public ThemeElement fromXML(File xml) {
 		return (ThemeElement) getXStream().fromXML(xml);
 	}
 
