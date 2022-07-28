@@ -1,12 +1,10 @@
 package br.com.mnb.theme.core.xml.xstream.converter;
 
-import static org.hamcrest.CoreMatchers.any;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -14,6 +12,9 @@ import static org.mockito.Mockito.when;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
@@ -25,26 +26,24 @@ import br.com.mnb.theme.core.xml.Content;
 import br.com.mnb.theme.core.xml.element.AbstractElement;
 import br.com.mnb.theme.core.xml.tag.TagConverter;
 
+@ExtendWith(MockitoExtension.class)
 class ElementXstreamConverterTest {
 
 	ElementXstreamConverter converter;
 
+	@Mock
 	HierarchicalStreamWriter mockHierarchicalStreamWriter;
+	@Mock
 	MarshallingContext mockMarshallingContext;
+	@Mock
 	HierarchicalStreamReader mockHierarchicalStreamReader;
+	@Mock
 	UnmarshallingContext mockUnmarshallingContext;
+	@Mock
 	TagConverter<AbstractElement, String> mockTagConverter;
 
 	@BeforeEach
-	@SuppressWarnings("unchecked")
 	public void setup() {
-		mockHierarchicalStreamWriter = mock(HierarchicalStreamWriter.class);
-		mockMarshallingContext = mock(MarshallingContext.class);
-		mockHierarchicalStreamReader = mock(HierarchicalStreamReader.class);
-		mockUnmarshallingContext = mock(UnmarshallingContext.class);
-		
-		mockTagConverter = mock(TagConverter.class);
-		
 		converter = new ElementXstreamConverter(mockTagConverter);		
 	}
 
@@ -96,9 +95,11 @@ class ElementXstreamConverterTest {
 		when(mockHierarchicalStreamReader.getNodeName()).thenReturn("");
 		when(mockHierarchicalStreamReader.getAttribute("name")).thenReturn("newName");
 		when(mockHierarchicalStreamReader.getAttribute("extra")).thenReturn("false");
-		when(mockUnmarshallingContext.convertAnother(any(Element.class), Content.class)).thenReturn(new Content());
 		
-		when(mockTagConverter.toComponent("")).thenReturn(new Element());
+		Element elementResult = new Element();
+		when(mockTagConverter.toComponent("")).thenReturn(elementResult);
+		when(mockUnmarshallingContext.convertAnother(elementResult, Content.class)).thenReturn(new Content());
+		
 		
 		Element obj = (Element) converter.unmarshal(mockHierarchicalStreamReader, mockUnmarshallingContext);
 

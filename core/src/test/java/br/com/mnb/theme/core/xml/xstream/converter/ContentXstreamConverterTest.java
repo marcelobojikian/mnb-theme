@@ -4,14 +4,15 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.MarshallingContext;
@@ -21,22 +22,19 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 
 import br.com.mnb.theme.core.xml.Content;
 
+@ExtendWith(MockitoExtension.class)
 class ContentXstreamConverterTest {
 
 	Converter converter = new ContentXstreamConverter();
 
+	@Mock
 	HierarchicalStreamWriter mockHierarchicalStreamWriter;
+	@Mock
 	MarshallingContext mockMarshallingContext;
+	@Mock
 	HierarchicalStreamReader mockHierarchicalStreamReader;
+	@Mock
 	UnmarshallingContext mockUnmarshallingContext;
-
-	@BeforeEach
-	public void setup() {
-		mockHierarchicalStreamWriter = mock(HierarchicalStreamWriter.class);
-		mockMarshallingContext = mock(MarshallingContext.class);
-		mockHierarchicalStreamReader = mock(HierarchicalStreamReader.class);
-		mockUnmarshallingContext = mock(UnmarshallingContext.class);
-	}
 
 	@Test
 	@DisplayName("Should allow Content")
