@@ -35,6 +35,7 @@
 		<module>core</module>
 		<module>emulationstation</module>
 		<module>batocera</module>
+		<module>recalbox</module>
 		<module>reports</module>
 	</modules>
 
