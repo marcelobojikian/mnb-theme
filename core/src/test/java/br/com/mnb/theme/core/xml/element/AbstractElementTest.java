@@ -1,6 +1,7 @@
 package br.com.mnb.theme.core.xml.element;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -10,20 +11,29 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import com.thoughtworks.xstream.XStream;
+
 import br.com.mnb.theme.core.model.Element;
 import br.com.mnb.theme.core.model.SecondElement;
 import br.com.mnb.theme.core.xml.Content;
-import br.com.mnb.theme.core.xml.tag.converter.TagElementConverter;
+import br.com.mnb.theme.core.xml.tag.NamedTagConverter;
+import br.com.mnb.theme.core.xml.xstream.XStreamBuilder;
 
 class AbstractElementTest {
 
-	TagElementConverter converter;
+	XStream xstream;
 	
 	@BeforeEach
 	public void setup() {
-		converter = new TagElementConverter();
-		converter.add(Element.class);
-		converter.add(SecondElement.class);
+		// @formatter:off
+		xstream = XStreamBuilder
+				.create()
+					.configContent()
+					.configElement(new NamedTagConverter<AbstractElement>())
+					.addElement(Element.class)
+					.addElement(SecondElement.class)
+				.build();
+		// @formatter:on
 	}
 
 	@Test
@@ -43,7 +53,7 @@ class AbstractElementTest {
 		Element element = new Element();
 
 		assertThrows(NullPointerException.class, () -> {
-			converter.toXML(element);
+			xstream.toXML(element);
 		});
 		
 	}
@@ -54,7 +64,7 @@ class AbstractElementTest {
 		Element element = new Element();
 		element.setName("TextElement");
 		
-		String contentXml = converter.toXML(element);
+		String contentXml = xstream.toXML(element);
 		String result = "<element name=\"TextElement\"/>";
 
 		assertEquals(contentXml, result);
@@ -77,7 +87,7 @@ class AbstractElementTest {
 		element.setExtra(attributeExtra);
 		element.setContent(new Content());
 
-		String elementXml = converter.toXML(element);
+		String elementXml = xstream.toXML(element);
 		
 		StringBuilder result = new StringBuilder("<"+tagName);
 		if(attributeExtra) {
@@ -97,12 +107,57 @@ class AbstractElementTest {
 		}
 		result.append(" name=\""+attributeName+"\"/>");
 
-		CommonElement elementObj = converter.fromXML(result.toString());
+		CommonElement elementObj = (CommonElement) xstream.fromXML(result.toString());
 
 		assertNotNull(elementObj);
 		assertInstanceOf(clazz, elementObj);
 		assertEquals(elementObj.getName(), attributeName);
 		assertTrue(elementObj.isExtra());
+		
+	}
+	
+	@Test
+	void sucessWhenCreateXmlElementWithSameNameInContent() {
+
+		Element element = new Element();
+		element.setName("nameElement");
+		Content content = new Content();
+		content.getAttributes().put("element", "123");
+		element.setContent(content);
+
+		String elementXml = xstream.toXML(element);
+		// @formatter:off
+		String result = "<element name=\"nameElement\">\n"
+					  + "  <element>123</element>\n"
+					  + "</element>";
+		// @formatter:on
+		
+		assertEquals(elementXml, result.toString());
+		
+	}
+	
+	@Test
+	void successWhenConvertToJavaElementWithSameNameInContent() {
+
+		// @formatter:off
+		String result = "<element name=\"nameElement\">\n"
+					  + "  <element>123</element>\n"
+					  + "</element>";
+		// @formatter:on
+
+		CommonElement elementObj = (CommonElement) xstream.fromXML(result.toString());
+
+		assertNotNull(elementObj);
+		assertInstanceOf(Element.class, elementObj);
+		assertEquals(elementObj.getName(), "nameElement");
+		assertFalse(elementObj.isExtra());
+		
+		Content content = elementObj.getContent();
+		assertNotNull(content.getAttributes());
+		assertEquals(content.getAttributes().size(),1);
+		assertTrue(content.getAttributes().containsKey("element"));
+		String value = content.getAttributes().get("element");
+		assertEquals(value, "123");
 		
 	}
 

@@ -10,28 +10,43 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import com.thoughtworks.xstream.XStream;
+
+import br.com.mnb.theme.batocera.xml.theme.BatoceraTheme;
 import br.com.mnb.theme.core.xml.Content;
 import br.com.mnb.theme.core.xml.element.AbstractElement;
 import br.com.mnb.theme.core.xml.element.CommonElement;
-import br.com.mnb.theme.core.xml.tag.converter.TagElementConverter;
+import br.com.mnb.theme.core.xml.tag.NamedTagConverter;
+import br.com.mnb.theme.core.xml.view.AbstractViewElement;
+import br.com.mnb.theme.core.xml.view.View;
+import br.com.mnb.theme.core.xml.xstream.XStreamBuilder;
 
 class BatoceraElementTest {
 
-	TagElementConverter converter;
+	XStream xstream;
 	
 	@BeforeEach
 	public void setup() {
-		converter = new TagElementConverter();
-		converter.add(Text.class);
-		converter.add(Image.class);
-		converter.add(Datetime.class);
-		converter.add(HelpSystem.class);
-		converter.add(Ninepatch.class);
-		converter.add(Rating.class);
-		converter.add(Sound.class);
-		converter.add(TextList.class);
-		converter.add(Video.class);
-		converter.add(BatoceraCarousel.class);
+		// @formatter:off
+		xstream = XStreamBuilder
+				.create()
+					.configTheme(BatoceraTheme.class)
+					.configContent()
+					.configElement(new NamedTagConverter<AbstractElement>())
+					.configView(new NamedTagConverter<AbstractViewElement>())					
+					.addView(View.class)
+					.addElement(Text.class)
+					.addElement(Image.class)
+					.addElement(Datetime.class)
+					.addElement(HelpSystem.class)
+					.addElement(Ninepatch.class)
+					.addElement(Rating.class)
+					.addElement(Sound.class)
+					.addElement(TextList.class)
+					.addElement(Video.class)
+					.addElement(BatoceraCarousel.class)
+				.build();
+		// @formatter:on
 	}
 
 	@Test
@@ -51,7 +66,7 @@ class BatoceraElementTest {
 		Text text = new Text();
 
 		assertThrows(NullPointerException.class, () -> {
-			converter.toXML(text);
+			xstream.toXML(text);
 		});
 		
 	}
@@ -62,7 +77,7 @@ class BatoceraElementTest {
 		Text text = new Text();
 		text.setName("TextElement");
 		
-		String contentXml = converter.toXML(text);
+		String contentXml = xstream.toXML(text);
 		String result = "<text name=\"TextElement\"/>";
 
 		assertEquals(contentXml, result);
@@ -175,7 +190,7 @@ class BatoceraElementTest {
 		element.setExtra(attributeExtra);
 		element.setContent(new Content());
 
-		String elementXml = converter.toXML(element);
+		String elementXml = xstream.toXML(element);
 		
 		StringBuilder result = new StringBuilder("<"+tagName);
 		if(attributeExtra) {
@@ -195,7 +210,7 @@ class BatoceraElementTest {
 		}
 		result.append(" name=\""+attributeName+"\"/>");
 
-		CommonElement elementObj = converter.fromXML(result.toString());
+		CommonElement elementObj = (CommonElement) xstream.fromXML(result.toString());
 
 		assertNotNull(elementObj);
 		assertInstanceOf(clazz, elementObj);

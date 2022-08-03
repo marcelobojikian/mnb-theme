@@ -5,21 +5,32 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import com.thoughtworks.xstream.XStream;
+
 import br.com.mnb.theme.core.model.Element;
 import br.com.mnb.theme.core.model.SecondElement;
+import br.com.mnb.theme.core.xml.element.AbstractElement;
 import br.com.mnb.theme.core.xml.element.CommonElement;
-import br.com.mnb.theme.core.xml.tag.converter.TagViewConverter;
+import br.com.mnb.theme.core.xml.tag.NamedTagConverter;
+import br.com.mnb.theme.core.xml.xstream.XStreamBuilder;
 
 class ViewTest {
 
-	TagViewConverter converter;
+	XStream xstream;
 	
 	@BeforeEach
 	public void setup() {
-		converter = new TagViewConverter();
-		converter.addView(View.class);
-		converter.addElement(Element.class);
-		converter.addElement(SecondElement.class);
+		// @formatter:off
+		xstream = XStreamBuilder
+				.create()
+					.configContent()
+					.configElement(new NamedTagConverter<AbstractElement>())
+					.configView(new NamedTagConverter<AbstractViewElement>())
+					.addView(View.class)
+					.addElement(Element.class)
+					.addElement(SecondElement.class)
+				.build();
+		// @formatter:on
 	}
 
 	@Test
@@ -38,7 +49,7 @@ class ViewTest {
 		View view = new View();
 		view.setName("View");
 
-		String contentXml = converter.toXML(view);
+		String contentXml = xstream.toXML(view);
 		String result = "<view name=\"View\"/>";
 
 		assertEquals(contentXml, result);
@@ -56,7 +67,7 @@ class ViewTest {
 
 		view.addElement(element);
 
-		String viewXml = converter.toXML(view);
+		String viewXml = xstream.toXML(view);
 		// @formatter:off
 		String result = "<view name=\"ViewElement\">\n"
 					  + "  <element name=\"TextElement\"/>\n"
@@ -81,7 +92,7 @@ class ViewTest {
 
 		view.addElements(element, secondElement);
 
-		String viewXml = converter.toXML(view);
+		String viewXml = xstream.toXML(view);
 		// @formatter:off
 		String result = "<view name=\"ViewElement\">\n"
 					  + "  <element name=\"TextElement\"/>\n"
@@ -105,7 +116,7 @@ class ViewTest {
 
 		view.addElement(element);
 
-		String viewXml = converter.toXML(view);
+		String viewXml = xstream.toXML(view);
 		// @formatter:off
 		String result = "<view name=\"ViewElement\">\n"
 					  + "  <element extra=\"true\" name=\"TextElement\"/>\n"
@@ -126,7 +137,7 @@ class ViewTest {
 				  	  + "</view>";
 		// @formatter:on
 
-		ViewElement viewObj = converter.fromXML(result);
+		ViewElement viewObj = (ViewElement) xstream.fromXML(result);
 
 		assertNotNull(viewObj);
 		assertEquals(viewObj.getName(), "ViewElement");

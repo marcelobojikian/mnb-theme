@@ -11,29 +11,44 @@ import java.util.Arrays;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import br.com.mnb.theme.core.model.Feature;
+import com.thoughtworks.xstream.XStream;
+
 import br.com.mnb.theme.core.model.Element;
+import br.com.mnb.theme.core.model.Feature;
 import br.com.mnb.theme.core.model.SecondElement;
-import br.com.mnb.theme.core.model.Theme;
 import br.com.mnb.theme.core.model.SecondFeature;
+import br.com.mnb.theme.core.model.Theme;
+import br.com.mnb.theme.core.xml.element.AbstractElement;
+import br.com.mnb.theme.core.xml.feature.AbstractFeature;
 import br.com.mnb.theme.core.xml.feature.FeatureElement;
-import br.com.mnb.theme.core.xml.tag.converter.TagThemeConverter;
+import br.com.mnb.theme.core.xml.tag.NamedTagConverter;
+import br.com.mnb.theme.core.xml.view.AbstractViewElement;
 import br.com.mnb.theme.core.xml.view.View;
 import br.com.mnb.theme.core.xml.view.ViewElement;
+import br.com.mnb.theme.core.xml.xstream.XStreamBuilder;
 
 class AbstractThemeTest {
 
-	TagThemeConverter converter;
+	XStream xstream;
 
 	@BeforeEach
 	public void setup() {
-		converter = new TagThemeConverter();
-		converter.setTheme(Theme.class);
-		converter.addAlias("feature", FeatureElement.class);
-		converter.addFeature("first", Feature.class);
-		converter.addFeature("second", SecondFeature.class);
-		converter.addElement("element", Element.class);
-		converter.addElement("second", SecondElement.class);
+		// @formatter:off
+		xstream = XStreamBuilder
+				.create()
+					.configTheme(Theme.class)
+					.configContent()
+					.configElement(new NamedTagConverter<AbstractElement>())
+					.configView(new NamedTagConverter<AbstractViewElement>())
+					.configFeature(new NamedTagConverter<AbstractFeature>())
+					.addAlias("feature", FeatureElement.class)
+					.addFeature(Feature.class)
+					.addFeature(SecondFeature.class)
+					.addView(View.class)
+					.addElement(Element.class)
+					.addElement(SecondElement.class)
+				.build();
+		// @formatter:on
 	}
 
 	@Test
@@ -52,7 +67,7 @@ class AbstractThemeTest {
 
 		Theme theme = new Theme();
 
-		String contentXml = converter.toXML(theme);
+		String contentXml = xstream.toXML(theme);
 		String result = "<theme/>";
 
 		assertEquals(contentXml, result);
@@ -65,7 +80,7 @@ class AbstractThemeTest {
 		Theme theme = new Theme();
 		theme.setFormatVersion(4);
 
-		String contentXml = converter.toXML(theme);
+		String contentXml = xstream.toXML(theme);
 		// @formatter:off
 		String result = "<theme>\n"
 					  + "  <formatVersion>4</formatVersion>\n"
@@ -86,7 +101,7 @@ class AbstractThemeTest {
 
 		theme.addViews(view);
 
-		String contentXml = converter.toXML(theme);
+		String contentXml = xstream.toXML(theme);
 		// @formatter:off
 		String result = "<theme>\n"
 					  + "  <view name=\"ViewElement\"/>\n"
@@ -110,7 +125,7 @@ class AbstractThemeTest {
 
 		theme.setViewElements(Arrays.asList(firstView, secondView));
 
-		String contentXml = converter.toXML(theme);
+		String contentXml = xstream.toXML(theme);
 		// @formatter:off
 		String result = "<theme>\n"
 					  + "  <view name=\"ViewElement\"/>\n"
@@ -129,7 +144,7 @@ class AbstractThemeTest {
 
 		theme.getIncludes().add("IncludeName");
 
-		String contentXml = converter.toXML(theme);
+		String contentXml = xstream.toXML(theme);
 		// @formatter:off
 		String result = "<theme>\n"
 					  + "  <include>IncludeName</include>\n"
@@ -147,7 +162,7 @@ class AbstractThemeTest {
 
 		theme.setIncludes(Arrays.asList("IncludeName", "SecondIncludeName"));
 
-		String contentXml = converter.toXML(theme);
+		String contentXml = xstream.toXML(theme);
 		// @formatter:off
 		String result = "<theme>\n"
 					  + "  <include>IncludeName</include>\n"
@@ -168,7 +183,7 @@ class AbstractThemeTest {
 
 		theme.getFeatures().add(feature);
 
-		String contentXml = converter.toXML(theme);
+		String contentXml = xstream.toXML(theme);
 		// @formatter:off
 		String result = "<theme>\n"
 				  	  + "  <feature supported=\"first\"/>\n"
@@ -189,7 +204,7 @@ class AbstractThemeTest {
 
 		theme.setFeatures(Arrays.asList(firstFeature, secondFeature));
 
-		String contentXml = converter.toXML(theme);
+		String contentXml = xstream.toXML(theme);
 		// @formatter:off
 		String result = "<theme>\n"
 					  + "  <feature supported=\"first\"/>\n"
@@ -216,7 +231,7 @@ class AbstractThemeTest {
 					  + "</theme>";
 		// @formatter:on
 
-		ThemeElement themeObj = (ThemeElement) converter.fromXML(result);
+		ThemeElement themeObj = (ThemeElement) xstream.fromXML(result);
 
 		assertNotNull(themeObj);
 		assertEquals(themeObj.getFormatVersion(), 4);

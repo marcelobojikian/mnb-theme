@@ -13,17 +13,22 @@ import org.junit.jupiter.api.Test;
 
 import com.thoughtworks.xstream.XStream;
 
-import br.com.mnb.theme.core.xml.xstream.XStreamConfigure;
-import br.com.mnb.theme.core.xml.xstream.configure.TagContentConfigure;
+import br.com.mnb.theme.core.xml.xstream.XStreamBuilder;
 
 public class ContentTest {
 	
-	final XStreamConfigure configure = new TagContentConfigure();
+	final String TAG = "element";
+	
 	XStream xstream;
 	
 	@BeforeEach
-	public void setup() {
-		xstream = configure.getXStream();
+	public void setup() {	
+		// @formatter:off	
+		xstream = XStreamBuilder
+				.create()
+					.configContent(TAG)
+				.build();
+		// @formatter:on
 	}
 
 	@Test

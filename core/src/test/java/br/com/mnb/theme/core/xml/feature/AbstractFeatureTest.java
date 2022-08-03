@@ -1,30 +1,48 @@
 package br.com.mnb.theme.core.xml.feature;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import br.com.mnb.theme.core.model.Feature;
+import com.thoughtworks.xstream.XStream;
+
 import br.com.mnb.theme.core.model.Element;
+import br.com.mnb.theme.core.model.Feature;
 import br.com.mnb.theme.core.model.SecondElement;
 import br.com.mnb.theme.core.model.SecondFeature;
-import br.com.mnb.theme.core.xml.tag.converter.TagFeatureConverter;
+import br.com.mnb.theme.core.xml.element.AbstractElement;
+import br.com.mnb.theme.core.xml.tag.NamedTagConverter;
+import br.com.mnb.theme.core.xml.view.AbstractViewElement;
 import br.com.mnb.theme.core.xml.view.View;
+import br.com.mnb.theme.core.xml.xstream.XStreamBuilder;
 
 
 class AbstractFeatureTest {
 
-	TagFeatureConverter converter;
+	XStream xstream;
 	
 	@BeforeEach
 	public void setup() {
-		converter = new TagFeatureConverter();
-		converter.addAlias("feature", FeatureElement.class);
-		converter.addFeature("first", Feature.class);
-		converter.addFeature("second", SecondFeature.class);
-		converter.addElement("element", Element.class);
-		converter.addElement("second", SecondElement.class);
+		// @formatter:off
+		xstream = XStreamBuilder
+				.create()
+					.configContent()
+					.configElement(new NamedTagConverter<AbstractElement>())
+					.configView(new NamedTagConverter<AbstractViewElement>())
+					.configFeature(new NamedTagConverter<AbstractFeature>())
+					.addAlias("feature", FeatureElement.class)
+					.addFeature(Feature.class)
+					.addFeature(SecondFeature.class)
+					.addView(View.class)
+					.addElement(Element.class)
+					.addElement(SecondElement.class)
+				.build();
+		// @formatter:on
 	}
 
 	@Test
@@ -49,14 +67,14 @@ class AbstractFeatureTest {
 		
 		Feature carousel = new Feature();
 		
-		String featureXml = converter.toXML(carousel);
+		String featureXml = xstream.toXML(carousel);
 		String result = "<feature supported=\"first\"/>";
 
 		assertEquals(featureXml, result);
 		
 		SecondFeature video = new SecondFeature();
 		
-		featureXml = converter.toXML(video);
+		featureXml = xstream.toXML(video);
 		result = "<feature supported=\"second\"/>";
 
 		assertEquals(featureXml, result);
@@ -72,7 +90,7 @@ class AbstractFeatureTest {
 		Feature carousel = new Feature();
 		carousel.setView(view);
 
-		String featureXml = converter.toXML(carousel);
+		String featureXml = xstream.toXML(carousel);
 		// @formatter:off
 		String result = "<feature supported=\"first\">\n"
 					  + "  <view name=\"ViewElement\"/>\n"
@@ -84,7 +102,7 @@ class AbstractFeatureTest {
 		SecondFeature video = new SecondFeature();
 		video.setView(view);
 
-		featureXml = converter.toXML(video);
+		featureXml = xstream.toXML(video);
 		// @formatter:off
 		result = "<feature supported=\"second\">\n"
 					  + "  <view name=\"ViewElement\"/>\n"
@@ -126,7 +144,7 @@ class AbstractFeatureTest {
 		feature.setView(view);
 		feature.addElement(element);
 
-		String featureXml = converter.toXML(feature);
+		String featureXml = xstream.toXML(feature);
 		// @formatter:off
 		String result = "<feature supported=\"first\">\n"
 					  + "  <view name=\"ViewElement\">\n"
@@ -145,7 +163,7 @@ class AbstractFeatureTest {
 		video.setView(view);
 		video.addElement(element);
 
-		featureXml = converter.toXML(video);
+		featureXml = xstream.toXML(video);
 		// @formatter:off
 		result = "<feature supported=\"second\">\n"
 					  + "  <view name=\"ViewElement\">\n"
@@ -175,7 +193,7 @@ class AbstractFeatureTest {
 		feature.setView(view);
 		feature.addElements(element, second);
 
-		String featureXml = converter.toXML(feature);
+		String featureXml = xstream.toXML(feature);
 		// @formatter:off
 		String result = "<feature supported=\"first\">\n"
 					  + "  <view name=\"ViewElement\">\n"
@@ -195,7 +213,7 @@ class AbstractFeatureTest {
 		video.setView(view);
 		video.addElements(element, second);
 
-		featureXml = converter.toXML(video);
+		featureXml = xstream.toXML(video);
 		// @formatter:off
 		result = "<feature supported=\"second\">\n"
 					  + "  <view name=\"ViewElement\">\n"
@@ -224,7 +242,7 @@ class AbstractFeatureTest {
 		feature.setView(view);
 		feature.addElement(element);
 
-		String featureXml = converter.toXML(feature);
+		String featureXml = xstream.toXML(feature);
 		// @formatter:off
 		String result = "<feature supported=\"first\">\n"
 					  + "  <view name=\"ViewElement\">\n"
@@ -243,7 +261,7 @@ class AbstractFeatureTest {
 		video.setView(view);
 		video.addElement(element);
 
-		featureXml = converter.toXML(video);
+		featureXml = xstream.toXML(video);
 		// @formatter:off
 		result = "<feature supported=\"second\">\n"
 					  + "  <view name=\"ViewElement\">\n"
@@ -267,7 +285,7 @@ class AbstractFeatureTest {
 					  + "</feature>";
 		// @formatter:on
 
-		FeatureElement featureObj = converter.fromXML(result);
+		FeatureElement featureObj = (FeatureElement) xstream.fromXML(result);
 
 		assertNotNull(featureObj);
 		assertEquals(featureObj.getSupported(), "first");
@@ -281,7 +299,7 @@ class AbstractFeatureTest {
 			   + "</feature>";
 		// @formatter:on
 
-		featureObj = converter.fromXML(result);
+		featureObj = (FeatureElement) xstream.fromXML(result);
 
 		assertNotNull(featureObj);
 		assertEquals(featureObj.getSupported(), "second");

@@ -3,6 +3,9 @@ package br.com.mnb.theme.batocera.xml.converter;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -163,6 +166,13 @@ class BatoceraConverterTest {
 					+ "  </feature>\n"
 					+ "</theme>";
 		// @formatter:on
+		BatoceraTheme theme = converter.fromXML(xml);
+		assertNotNull(theme);
+	}
+
+	@Test
+	public void sucessWhenFromXmlFile() throws FileNotFoundException {
+		File xml = new File(this.getClass().getResource("BatoceraFileTest.xml").getFile());
 		BatoceraTheme theme = converter.fromXML(xml);
 		assertNotNull(theme);
 	}

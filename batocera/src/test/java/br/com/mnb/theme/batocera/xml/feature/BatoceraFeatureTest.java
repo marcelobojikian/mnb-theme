@@ -9,6 +9,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import com.thoughtworks.xstream.XStream;
+
 import br.com.mnb.theme.batocera.xml.element.BatoceraCarousel;
 import br.com.mnb.theme.batocera.xml.element.Datetime;
 import br.com.mnb.theme.batocera.xml.element.HelpSystem;
@@ -19,32 +21,47 @@ import br.com.mnb.theme.batocera.xml.element.Sound;
 import br.com.mnb.theme.batocera.xml.element.Text;
 import br.com.mnb.theme.batocera.xml.element.TextList;
 import br.com.mnb.theme.batocera.xml.element.Video;
+import br.com.mnb.theme.batocera.xml.theme.BatoceraTheme;
+import br.com.mnb.theme.core.xml.element.AbstractElement;
+import br.com.mnb.theme.core.xml.feature.AbstractFeature;
 import br.com.mnb.theme.core.xml.feature.FeatureElement;
-import br.com.mnb.theme.core.xml.tag.converter.TagFeatureConverter;
+import br.com.mnb.theme.core.xml.tag.NamedTagConverter;
+import br.com.mnb.theme.core.xml.view.AbstractViewElement;
 import br.com.mnb.theme.core.xml.view.View;
+import br.com.mnb.theme.core.xml.xstream.XStreamBuilder;
 
 public class BatoceraFeatureTest {
 
-	TagFeatureConverter converter;
+	XStream xstream;
 	
 	@BeforeEach
 	public void setup() {
-		converter = new TagFeatureConverter();
-		
-		converter.addAlias("feature", FeatureElement.class);
-		converter.addFeature("carousel", CarouselFeature.class);
-		converter.addFeature("video", VideoFeature.class);
-
-		converter.addElement("text", Text.class);
-		converter.addElement("image", Image.class);
-		converter.addElement("datetime", Datetime.class);
-		converter.addElement("helpsystem", HelpSystem.class);
-		converter.addElement("ninepatch", Ninepatch.class);
-		converter.addElement("rating", Rating.class);
-		converter.addElement("sound", Sound.class);
-		converter.addElement("textlist", TextList.class);
-		converter.addElement("video", Video.class);
-		converter.addElement("carousel", BatoceraCarousel.class);
+		// @formatter:off
+		xstream = XStreamBuilder
+				.create()
+					.configTheme(BatoceraTheme.class)
+					.configContent()
+					.configElement(new NamedTagConverter<AbstractElement>())
+					.configView(new NamedTagConverter<AbstractViewElement>())
+					.configFeature(new NamedTagConverter<AbstractFeature>())
+					
+					.addAlias("feature", FeatureElement.class)
+					.addFeature(CarouselFeature.class)
+					.addFeature(VideoFeature.class)
+					
+					.addView(View.class)
+					.addElement(Text.class)
+					.addElement(Image.class)
+					.addElement(Datetime.class)
+					.addElement(HelpSystem.class)
+					.addElement(Ninepatch.class)
+					.addElement(Rating.class)
+					.addElement(Sound.class)
+					.addElement(TextList.class)
+					.addElement(Video.class)
+					.addElement(BatoceraCarousel.class)
+				.build();
+		// @formatter:on
 	}
 
 	@Test
@@ -69,14 +86,14 @@ public class BatoceraFeatureTest {
 		
 		CarouselFeature carousel = new CarouselFeature();
 		
-		String featureXml = converter.toXML(carousel);
+		String featureXml = xstream.toXML(carousel);
 		String result = "<feature supported=\"carousel\"/>";
 
 		assertEquals(featureXml, result);
 		
 		VideoFeature video = new VideoFeature();
 		
-		featureXml = converter.toXML(video);
+		featureXml = xstream.toXML(video);
 		result = "<feature supported=\"video\"/>";
 
 		assertEquals(featureXml, result);
@@ -92,7 +109,7 @@ public class BatoceraFeatureTest {
 		CarouselFeature carousel = new CarouselFeature();
 		carousel.setView(view);
 
-		String featureXml = converter.toXML(carousel);
+		String featureXml = xstream.toXML(carousel);
 		// @formatter:off
 		String result = "<feature supported=\"carousel\">\n"
 					  + "  <view name=\"ViewElement\"/>\n"
@@ -104,7 +121,7 @@ public class BatoceraFeatureTest {
 		VideoFeature video = new VideoFeature();
 		video.setView(view);
 
-		featureXml = converter.toXML(video);
+		featureXml = xstream.toXML(video);
 		// @formatter:off
 		result = "<feature supported=\"video\">\n"
 					  + "  <view name=\"ViewElement\"/>\n"
@@ -146,7 +163,7 @@ public class BatoceraFeatureTest {
 		carousel.setView(view);
 		carousel.addElement(text);
 
-		String featureXml = converter.toXML(carousel);
+		String featureXml = xstream.toXML(carousel);
 		// @formatter:off
 		String result = "<feature supported=\"carousel\">\n"
 					  + "  <view name=\"ViewElement\">\n"
@@ -165,7 +182,7 @@ public class BatoceraFeatureTest {
 		video.setView(view);
 		video.addElement(text);
 
-		featureXml = converter.toXML(video);
+		featureXml = xstream.toXML(video);
 		// @formatter:off
 		result = "<feature supported=\"video\">\n"
 					  + "  <view name=\"ViewElement\">\n"
@@ -195,7 +212,7 @@ public class BatoceraFeatureTest {
 		carousel.setView(view);
 		carousel.addElements(text, image);
 
-		String featureXml = converter.toXML(carousel);
+		String featureXml = xstream.toXML(carousel);
 		// @formatter:off
 		String result = "<feature supported=\"carousel\">\n"
 					  + "  <view name=\"ViewElement\">\n"
@@ -215,7 +232,7 @@ public class BatoceraFeatureTest {
 		video.setView(view);
 		video.addElements(text, image);
 
-		featureXml = converter.toXML(video);
+		featureXml = xstream.toXML(video);
 		// @formatter:off
 		result = "<feature supported=\"video\">\n"
 					  + "  <view name=\"ViewElement\">\n"
@@ -244,7 +261,7 @@ public class BatoceraFeatureTest {
 		carousel.setView(view);
 		carousel.addElement(text);
 
-		String featureXml = converter.toXML(carousel);
+		String featureXml = xstream.toXML(carousel);
 		// @formatter:off
 		String result = "<feature supported=\"carousel\">\n"
 					  + "  <view name=\"ViewElement\">\n"
@@ -263,7 +280,7 @@ public class BatoceraFeatureTest {
 		video.setView(view);
 		video.addElement(text);
 
-		featureXml = converter.toXML(video);
+		featureXml = xstream.toXML(video);
 		// @formatter:off
 		result = "<feature supported=\"video\">\n"
 					  + "  <view name=\"ViewElement\">\n"
@@ -287,7 +304,7 @@ public class BatoceraFeatureTest {
 					  + "</feature>";
 		// @formatter:on
 
-		FeatureElement featureObj = converter.fromXML(result);
+		FeatureElement featureObj = (FeatureElement) xstream.fromXML(result);
 
 		assertNotNull(featureObj);
 		assertEquals(featureObj.getSupported(), "carousel");
@@ -301,7 +318,7 @@ public class BatoceraFeatureTest {
 			   + "</feature>";
 		// @formatter:on
 
-		featureObj = converter.fromXML(result);
+		featureObj = (FeatureElement) xstream.fromXML(result);
 
 		assertNotNull(featureObj);
 		assertEquals(featureObj.getSupported(), "video");

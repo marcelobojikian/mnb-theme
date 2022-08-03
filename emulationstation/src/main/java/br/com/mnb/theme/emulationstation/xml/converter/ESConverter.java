@@ -2,7 +2,13 @@ package br.com.mnb.theme.emulationstation.xml.converter;
 
 import java.io.File;
 
-import br.com.mnb.theme.core.xml.tag.converter.TagThemeConverter;
+import com.thoughtworks.xstream.XStream;
+
+import br.com.mnb.theme.core.xml.element.AbstractElement;
+import br.com.mnb.theme.core.xml.tag.NamedTagConverter;
+import br.com.mnb.theme.core.xml.view.AbstractViewElement;
+import br.com.mnb.theme.core.xml.view.View;
+import br.com.mnb.theme.core.xml.xstream.XStreamBuilder;
 import br.com.mnb.theme.emulationstation.xml.element.Datetime;
 import br.com.mnb.theme.emulationstation.xml.element.HelpSystem;
 import br.com.mnb.theme.emulationstation.xml.element.Image;
@@ -16,33 +22,40 @@ import br.com.mnb.theme.emulationstation.xml.theme.EmulationStationTheme;
 
 public class ESConverter {
 	
-	private TagThemeConverter converter;
+	private XStream xstream;
 	
 	public ESConverter() {
-		converter = new TagThemeConverter();
-		converter.setTheme(EmulationStationTheme.class);
-		
-		converter.addElement("text", Text.class);
-		converter.addElement("image", Image.class);
-		converter.addElement("datetime", Datetime.class);
-		converter.addElement("helpsystem", HelpSystem.class);
-		converter.addElement("ninepatch", Ninepatch.class);
-		converter.addElement("rating", Rating.class);
-		converter.addElement("sound", Sound.class);
-		converter.addElement("textlist", TextList.class);
-		converter.addElement("video", Video.class);
+		// @formatter:off
+		xstream = XStreamBuilder
+				.create()
+					.configTheme(EmulationStationTheme.class)
+					.configContent()
+					.configElement(new NamedTagConverter<AbstractElement>())
+					.configView(new NamedTagConverter<AbstractViewElement>())
+					.addView(View.class)
+					.addElement(Text.class)
+					.addElement(Image.class)
+					.addElement(Datetime.class)
+					.addElement(HelpSystem.class)
+					.addElement(Ninepatch.class)
+					.addElement(Rating.class)
+					.addElement(Sound.class)
+					.addElement(TextList.class)
+					.addElement(Video.class)
+				.build();
+		// @formatter:on
 	}
 
 	public String toXML(EmulationStationTheme element) {
-		return converter.toXML(element);
+		return xstream.toXML(element);
 	}
 
 	public EmulationStationTheme fromXML(String xml) {
-		return (EmulationStationTheme) converter.fromXML(xml);
+		return (EmulationStationTheme) xstream.fromXML(xml);
 	}
 
 	public EmulationStationTheme fromXML(File xml) {
-		return (EmulationStationTheme) converter.fromXML(xml);
+		return (EmulationStationTheme) xstream.fromXML(xml);
 	}
 
 }
