@@ -1,19 +1,28 @@
 package br.com.mnb.theme.emulationstation.external;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.Files;
 
 import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestTemplate;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.util.ResourceUtils;
+import org.xmlunit.builder.DiffBuilder;
+import org.xmlunit.diff.DefaultNodeMatcher;
+import org.xmlunit.diff.Diff;
+import org.xmlunit.diff.ElementSelectors;
 
-import br.com.mnb.theme.emulationstation.external.tool.EvaluateBuilder;
-import br.com.mnb.theme.emulationstation.external.tool.SystemEvaluater;
-import br.com.mnb.theme.emulationstation.external.tool.ViewEvaluator;
-import br.com.mnb.theme.emulationstation.xml.element.Datetime;
-import br.com.mnb.theme.emulationstation.xml.element.HelpSystem;
-import br.com.mnb.theme.emulationstation.xml.element.Image;
-import br.com.mnb.theme.emulationstation.xml.element.Rating;
-import br.com.mnb.theme.emulationstation.xml.element.Text;
-import br.com.mnb.theme.emulationstation.xml.element.TextList;
+import br.com.mnb.theme.emulationstation.builder.EvaluatorBuilder;
+import br.com.mnb.theme.emulationstation.evaluator.ThemeEvaluator;
+import br.com.mnb.theme.emulationstation.external.template.ExternalFileTestCase;
+import br.com.mnb.theme.emulationstation.external.template.ExternalFileTestCase.EvaluatorTestCase;
+import br.com.mnb.theme.emulationstation.external.template.NilsbyteInvocationContextProvider;
+import br.com.mnb.theme.emulationstation.xml.converter.ESConverter;
+import br.com.mnb.theme.emulationstation.xml.theme.EmulationStationTheme;
 
 /**
  * 
@@ -27,74 +36,69 @@ import br.com.mnb.theme.emulationstation.xml.element.TextList;
  */
 @Disabled("Disabled until Download project!")
 public class NilsbyteTest {
+	
+	static final String targetFormatter = "classpath:external/%1$s/%2$s/theme.xml";
 
-	@Test
-	@SuppressWarnings("unchecked")
-	public void testWithDefaultEvaluator() throws FileNotFoundException {
-		// @formatter:off
-		String[] systemArray = new String[] {
-				"3do", "amiga", "amstradcpc", "atari2600",
-				"atari5200", "atari7800", "atari800", "atarijaguar", 
-				"atarijaguarcd", "atarilynx", "atarixe", "c64", 
-				"colecovision", "dreamcast", "famicom", "gamegear", 
-				"gb", "gba", "gbc", "gc", "genesis", "intellivision", 
-				"macintosh", "mastersystem", "megadrive", "neogeo", 
-				"neogeocd", "nes", "ngp", "ngpc", "odyssey2", "pc", 
-				"pcengine", "ps2", "psp", "psx", "saturn", "sega32x", 
-				"segacd", "sfc", "snes", "vectrex", "virtualboy", 
-				"wii", "wonderswan", "wonderswancolor", "xbox", 
-				"zmachine", "zxspectrum" };
+	@TestTemplate
+    @ExtendWith(NilsbyteInvocationContextProvider.class)
+	public void successWhenTestExternalFile(ExternalFileTestCase testCase) throws FileNotFoundException {
+
+		final String themeFolder = "nilsbyte";
 		
-		ViewEvaluator defaultEvaluator = EvaluateBuilder
-		.create()
-			.evaluateView("system", 3, Image.class, Image.class, HelpSystem.class)
-			.evaluateView("basic, detailed", 3, Text.class, Text.class, Image.class)
-			.evaluateView("basic", 1, TextList.class)
-			.evaluateView("detailed", 19, Image.class, Text.class, Text.class, Text.class, Text.class, Text.class, Text.class,
-					Text.class, Text.class, Text.class, Datetime.class, Text.class, Text.class, Text.class, Text.class,
-					Datetime.class, Rating.class, Text.class, TextList.class)
-		.build();
-		// @formatter:on
-
-		for (String systemName : systemArray) {
-			System.out.println("Test system " + systemName);
-			testSystem(systemName, defaultEvaluator);
-		}
-	}
-
-	@Test
-	@SuppressWarnings("unchecked")
-	public void testWithDiffBasicDtailedEvaluator() throws FileNotFoundException {
-		// @formatter:off
-		String[] systemArray = new String[] {
-				"apple2", "atarifalcon", "atarist", "fba", 
-				"mame", "msx", "n64", "nds", "ports", "scummvm" };
+		applyTestCase(themeFolder, testCase);
 		
-		ViewEvaluator diffBasicDtailedEvaluator = EvaluateBuilder
-		.create()
-			.evaluateView("system", 3, Image.class, Image.class, HelpSystem.class)
-			.evaluateView("basic, detailed", 2, Text.class, Image.class)
-			.evaluateView("basic", 1, TextList.class)
-			.evaluateView("detailed", 19, Image.class, Text.class, Text.class, Text.class, Text.class, Text.class, Text.class,
-					Text.class, Text.class, Text.class, Datetime.class, Text.class, Text.class, Text.class, Text.class,
-					Datetime.class, Rating.class, Text.class, TextList.class)
-		.build();
-		// @formatter:on
+	}
+	
+	void applyTestCase(String themeFolder, ExternalFileTestCase testCase) throws FileNotFoundException {
 
-		for (String systemName : systemArray) {
-			System.out.println("Test system " + systemName);
-			testSystem(systemName, diffBasicDtailedEvaluator);
+		String[] systems = testCase.getSystems();
+		for (String system : systems) {
+			EvaluatorTestCase[] evaluators = testCase.getEvaluator();
+			EvaluatorBuilder builder = EvaluatorBuilder.create();
+			for (EvaluatorTestCase evaluator : evaluators) {
+				builder.evaluateView(evaluator.getName(), evaluator.getCount(), evaluator.getClasses());
+			}
+			ThemeEvaluator themeEvaluator = builder.build();
+			System.out.println("Test system " + system);
+			checkTheme(themeFolder, system, themeEvaluator, false);
 		}
+		
 	}
 
-	public void testSystem(String target, ViewEvaluator viewEvaluator) throws FileNotFoundException {
-		String targetValue = getTarget(target);
-		SystemEvaluater evaluator = new SystemEvaluater(targetValue);
-		evaluator.evaluate(viewEvaluator);
-	}
+	void checkTheme(String themeFolder, String system, ThemeEvaluator themeEvaluator, boolean sanitizeTarget) throws FileNotFoundException {
+		
+		String target = String.format(targetFormatter, themeFolder, system);
+		
+		File file = ResourceUtils.getFile(target);
+		String content = null;
+		try {
+			content = Files.readString(file.toPath());
+			if(sanitizeTarget) {
+				content = content.replaceAll("&", "&amp;");
+			}
+		} catch (IOException e) {
+			throw new FileNotFoundException(target);
+		}
+		
+		ESConverter converter = new ESConverter();
+		EmulationStationTheme theme = converter.fromXML(content);
 
-	public String getTarget(String target) {
-		return "classpath:external/nilsbyte/" + target + "/theme.xml";
+		// Evaluator apply
+		themeEvaluator.evaluate(theme);
+		
+		String xml = converter.toXML(theme);
+		
+		Diff diff = DiffBuilder.compare(xml).withTest(content)
+	    		.checkForSimilar()
+	    		.ignoreComments()
+	    		.ignoreWhitespace()
+	    		.normalizeWhitespace()
+	    		.ignoreElementContentWhitespace() 
+	    		.withNodeMatcher(new DefaultNodeMatcher(ElementSelectors.byNameAndText))
+	    		.build();
+		
+	    assertFalse(diff.hasDifferences(), "XML similar " + diff.toString());
+	    
 	}
 
 }
