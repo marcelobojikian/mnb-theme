@@ -1,0 +1,36 @@
+<theme>
+  <formatVersion>4</formatVersion>
+  <view name="system, basic, detailed, video">
+    <image extra="true" name="background_all"/>
+    <helpsystem name="help"/>
+  </view>
+  <view name="basic, detailed, video">
+    <image name="logo"/>
+    <image extra="true" name="help_seperator"/>
+  </view>
+  <view name="basic">
+    <textlist name="gamelist"/>
+  </view>
+  <view name="detailed, video">
+    <textlist name="gamelist"/>
+    <image extra="true" name="bezel"/>
+    <text name="md_description,md_lbl_rating, md_lbl_releasedate"/>
+    <text name="md_lbl_rating"/>
+    <rating name="md_rating"/>
+  </view>
+  <feature supported="carousel">
+    <view name="system">
+      <carousel name="systemcarousel">
+        <TESTE__123>true</TESTE__123>
+      </carousel>
+      <text name="logoText"/>
+      <image name="seperator"/>
+      <text name="systemInfo"/>
+    </view>
+  </feature>
+  <feature supported="video">
+    <view name="video">
+      <video name="md_video"/>
+    </view>
+  </feature>
+</theme>
